@@ -1,0 +1,43 @@
+return (
+    <div className="min-h-screen bg-gray-50">
+      
+      <Navbar />
+
+      {currentPage === "home" && (
+        <HomePage
+          setSelectedProduct={setSelectedProduct}
+        />
+      )}
+
+      {currentPage === "products" && (
+        <ProductsPage
+          setCurrentPage={setCurrentPage}
+          setSelectedProduct={setSelectedProduct}
+          addToCart={addToCart}
+        />
+      )}
+
+      {currentPage === "productInfo" && selectedProduct && (
+        <ProductInfoPage
+          product={selectedProduct}
+        />
+      )}
+
+      {currentPage === "cart" && (
+        // <CartPage
+        //   cart={cart}
+        //   updateQuantity={updateQuantity}
+        //   removeFromCart={removeFromCart}
+        //   setCurrentPage={setCurrentPage}
+        // />
+        <CartPage/>
+      )}
+
+      {currentPage === "login" && (
+        <LoginPage/>
+      )}
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
