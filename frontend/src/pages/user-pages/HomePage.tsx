@@ -146,7 +146,7 @@ const HomePage = () => {
                   Shop Now
                 </button>
                 <button className="px-8 py-3 bg-white text-rose-500 border-2 border-rose-500 rounded-full hover:bg-rose-50 transition">
-                  Learn More
+                  Find flowers for you
                 </button>
               </div>
             </div>

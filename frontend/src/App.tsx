@@ -19,6 +19,7 @@ import ShopSettingsPage from "./pages/shop-pages/ShopSettingsPage";
 
 
 // Navigation Component
+
 const App = () => {
 
   // const cartItemCount = cart.reduce((sum:any, item:any) => sum + item.quantity, 0);
