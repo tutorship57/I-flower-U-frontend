@@ -120,7 +120,7 @@ const mockProducts: Product[] = [
 ];
 
 
-const HomePage = ({ setSelectedProduct }: { setSelectedProduct: (product: Product) => void }) => {
+const HomePage = () => {
   const featuredProducts = mockProducts.slice(0, 3);
   const {setCurrentPage} = useNavBarStore();
   return (
@@ -227,10 +227,6 @@ const HomePage = ({ setSelectedProduct }: { setSelectedProduct: (product: Produc
                       ${product.product_price}
                     </span>
                     <button
-                      onClick={() => {
-                        setSelectedProduct(product);
-                        setCurrentPage("productInfo");
-                      }}
                       className="px-6 py-2 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition"
                     >
                       View Details
