@@ -1,8 +1,6 @@
-import React from 'react';
 import { ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 import { useCartStore } from '../../stores/cart-store';
 import { useNavBarStore } from '../../stores/navbar-store';
-import type { CartItem } from '../../types/cart';
 import { useQuery } from '@tanstack/react-query';
 import { productService } from '../../services/product';
 import type { ProductPreview } from '../../types/product';

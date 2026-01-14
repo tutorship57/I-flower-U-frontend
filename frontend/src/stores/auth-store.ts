@@ -1,7 +1,13 @@
 import { create } from "zustand";
 import axios from "axios";
 import type { Role } from "../types/role";
-type AuthState = any 
+type AuthState = {
+    loading: boolean;
+    user: string | null;  // หรืออาจจะเป็น object ที่เก็บข้อมูลผู้ใช้เพิ่มเติม
+    role: Role;
+    isLoggedIn: boolean;
+    fetchCurrentUser: () => Promise<void>;
+}
 
 type UserData = {
     user_id: string;

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import { useState } from 'react';
 import { Star, Plus, Minus, Heart } from 'lucide-react';
 import { useCartStore } from '../../stores/cart-store';
 import { useNavBarStore } from '../../stores/navbar-store';
@@ -6,26 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { productService } from '../../services/product';
 import type { ProductSchema2 } from '../../types/product';
-import type { CartTemp } from '../../types/cart';
 
-type Product = {
-  product_id: string;
-  product_name: string;
-  product_description: string;
-  product_price: number;
-  product_stock: number;
-  category: { category_name: string };
-  images: { image_url: string }[];
-  colors: string[];
-  tags: string[];
-};
 
-type Props = {
-  product: ProductSchema2;
-};  
 // Product Info Page
 // const ProductInfoPage = ({ product }: Props) => {
-const ProductInfoPage = ({selectedProduct}:any) => {
+const ProductInfoPage = () => {
   const productId = useParams().productId;
   // const productId = useParams().productId;
   const { data: product, isLoading, error } = useQuery<ProductSchema2>({
@@ -51,9 +36,9 @@ const ProductInfoPage = ({selectedProduct}:any) => {
     navigate('/products')
   }
   return (
-    !isLoading &&<div className="min-h-screen bg-gray-50 py-12">
+    !isLoading && product &&<div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <button
+        <button 
           onClick={handleNavigateBacktoProducts}
           className="mb-6 text-gray-600 hover:text-rose-500 transition"
         >

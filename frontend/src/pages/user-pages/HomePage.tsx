@@ -1,4 +1,3 @@
-import React from 'react'
 import { Clock, Heart, MapPin, Phone } from "lucide-react";
 import { useNavBarStore } from '../../stores/navbar-store';
 type Product = {
@@ -121,7 +120,7 @@ const mockProducts: Product[] = [
 ];
 
 
-const HomePage = ({ setSelectedProduct }: any) => {
+const HomePage = ({ setSelectedProduct }: { setSelectedProduct: (product: Product) => void }) => {
   const featuredProducts = mockProducts.slice(0, 3);
   const {setCurrentPage} = useNavBarStore();
   return (

@@ -1,15 +1,13 @@
-import React from 'react'
 import { Heart, Star, Plus } from 'lucide-react';
-import type { ProductSchema } from '../types/product';
 import type { ProductSchema2 } from '../types/product';
-type Props = {
-  filteredProducts: ProductSchema2[];
-  setCurrentPage: (page: string) => void;
-  setSelectedProduct: (product: ProductSchema) => void;
-  addItem: (product: ProductSchema, quantity: number) => void;
-};
+// type Props = {
+//   filteredProducts: ProductSchema2[];
+//   setCurrentPage: (page: string) => void;
+//   setSelectedProduct: (product: ProductSchema) => void;
+//   addItem: (product: ProductSchema, quantity: number) => void;
+// };
 
-const ProductGrid = ({filteredProducts,setCurrentPage,setSelectedProduct,addItem}: any) => {
+const ProductGrid = ({filteredProducts,setSelectedProduct,addItem}: any) => {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts?.map((product: ProductSchema2) => (
