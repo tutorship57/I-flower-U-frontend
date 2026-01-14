@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { ShoppingCart, Search, User, Heart, Menu, X, Star, Plus, Minus, Trash2, MapPin, Clock, Phone } from 'lucide-react';
+import { ShoppingCart, Search, User, Heart, Menu, X} from 'lucide-react';
 import { useNavBarStore } from '../stores/navbar-store';
 import { useAuthStore } from '../stores/auth-store';
 import { useCartStore } from '../stores/cart-store';
 import { useNavigate } from 'react-router';
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const {currentPage,setCurrentPage,setCartItemCount} = useNavBarStore();
+  const {currentPage,setCurrentPage} = useNavBarStore();
   const {isLoggedIn} = useAuthStore();
   const {items} = useCartStore();
   const navigate = useNavigate();

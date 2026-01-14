@@ -1,7 +1,6 @@
 
 
 // export default App;
-import InputField from "./components/InputField";
 import LoginPage from "./pages/user-pages/LoginPage";
 import React, { useState } from "react";
 import ShopProductsPage from "./pages/shop-pages/ProductsPage";
@@ -13,10 +12,6 @@ import {
   Heart,
   Menu,
   X,
-  Star,
-  Plus,
-  Minus,
-  Trash2,
   MapPin,
   Clock,
   Phone,
@@ -27,7 +22,7 @@ import ShopRoute from "./routes/ShopRoute";
 import UserRoute from "./routes/UserRoute";
 import Navbar from "./components/Navbar";
 import { useNavBarStore } from "./stores/navbar-store";
-
+import UserProductsPage from "./pages/user-pages/ProductsPage";
 import FilterElement from "./components/FilterElement";
 import ProductGrid from "./components/ProductGrid";
 import ProductInfoPage from "./pages/user-pages/ProductInfoPage";
@@ -940,7 +935,7 @@ const App = () => {
         <Route path="/" element={<UserRoute/>}>
           <Route path="" element={<HomePage/>} />
           <Route path="login" element={<LoginPage/>}/>
-          <Route path="products" element={<ProductsPage/>}/>
+          <Route path="products" element={<UserProductsPage/>}/>
           <Route path="productInfo/:productId" element={<ProductInfoPage />}/>
           <Route path="cart" element={<CartPage/>}/>
         </Route>

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Heart, Star, Plus } from 'lucide-react';
 import type { ProductSchema } from '../types/product';
-
+import type { ProductSchema2 } from '../types/product';
 type Props = {
-  filteredProducts: ProductSchema[];
+  filteredProducts: ProductSchema2[];
   setCurrentPage: (page: string) => void;
   setSelectedProduct: (product: ProductSchema) => void;
   addItem: (product: ProductSchema, quantity: number) => void;
@@ -12,14 +12,14 @@ type Props = {
 const ProductGrid = ({filteredProducts,setCurrentPage,setSelectedProduct,addItem}: any) => {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProducts.map((product: any) => (
+          {filteredProducts?.map((product: ProductSchema2) => (
             <div
               key={product.product_id}
               className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition"
             >
               <div className="relative">
                 <img
-                  src={product.images[0].image_url}
+                  src={product.productImage[0].image_url}
                   alt={product.product_name}
                   className="w-full h-72 object-cover"
                 />
@@ -49,12 +49,12 @@ const ProductGrid = ({filteredProducts,setCurrentPage,setSelectedProduct,addItem
                   {product.product_description}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {product.tags.map((tag: any) => (
+                  {product.productTagEvent?.TagEvent?.map((tag: { tag_event_name: string }) => (
                     <span
-                      key={tag}
+                      key={tag.tag_event_name}
                       className="px-2 py-1 bg-pink-50 text-pink-600 text-xs rounded-full"
                     >
-                      {tag}
+                      {tag.tag_event_name}
                     </span>
                   ))}
                 </div>
@@ -66,7 +66,6 @@ const ProductGrid = ({filteredProducts,setCurrentPage,setSelectedProduct,addItem
                     <button
                       onClick={() => {
                         setSelectedProduct(product);
-                        setCurrentPage("productInfo");
                       }}
                       className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition"
                     >

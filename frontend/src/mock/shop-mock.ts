@@ -128,3 +128,4 @@ export const generateMockData = () => {
 
   return { categories, colors, tagEvents, products, orders, shop };
 };
+

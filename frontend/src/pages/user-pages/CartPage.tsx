@@ -3,9 +3,23 @@ import { ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 import { useCartStore } from '../../stores/cart-store';
 import { useNavBarStore } from '../../stores/navbar-store';
 import type { CartItem } from '../../types/cart';
+import { useQuery } from '@tanstack/react-query';
+import { productService } from '../../services/product';
+import type { ProductPreview } from '../../types/product';
 // Shopping Cart Page
 const CartPage = () => {
   const { items, updateQuantity, removeFromCart } = useCartStore();
+  const { data:productPreview, isLoading, error } = useQuery<[ProductPreview]>({
+    queryKey: ['cart-items-details', items],
+    queryFn: async () => {
+      // Fetch detailed product info for each item in the cart
+      const productDetails =await productService.getProductByIds(
+        items.map(item => item.product_id)
+      );
+      return productDetails.data;
+    }
+  }
+  )
   const subtotal = items.reduce((sum:any, item:any) => sum + item.product_price * item.quantity, 0);
   const shipping = 0;
   const total = subtotal + shipping;
@@ -30,11 +44,13 @@ const CartPage = () => {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
-              {items.map((item:CartItem) => (
-                <div key={item.product_id} className="bg-white rounded-2xl shadow-md p-6">
+              {productPreview?.map((item: ProductPreview) => {
+                const quantity = items.find(i => i.product_id === item.product_id)?.quantity || 0;
+                return(
+                 <div key={item.product_id} className="bg-white rounded-2xl shadow-md p-6">
                   <div className="flex gap-6">
                     <img
-                      src={item.images[0].image_url}
+                      src={item.productImage[0].image_url}
                       alt={item.product_name}
                       className="w-32 h-32 object-cover rounded-xl"
                     />
@@ -52,14 +68,14 @@ const CartPage = () => {
                       <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-3">
                           <button
-                            onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
+                            onClick={() => updateQuantity(item.product_id, items[items.findIndex(i => i.product_id === item.product_id)].quantity - 1)}
                             className="p-1 bg-gray-100 rounded-full hover:bg-gray-200 transition"
                           >
                             <Minus className="w-4 h-4" />
                           </button>
-                          <span className="font-semibold w-8 text-center">{item.quantity}</span>
+                          <span className="font-semibold w-8 text-center">{quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.product_id, quantity + 1)}
                             className="p-1 bg-gray-100 rounded-full hover:bg-gray-200 transition"
                           >
                             <Plus className="w-4 h-4" />
@@ -68,14 +84,14 @@ const CartPage = () => {
                         <div className="text-right">
                           <div className="text-sm text-gray-500">${item.product_price} each</div>
                           <div className="text-xl font-bold text-rose-500">
-                            ${(item.product_price * item.quantity).toFixed(2)}
+                            ${(item.product_price * quantity).toFixed(2)}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              )})}
             </div>
             {/* Order Summary */}
             <div className="lg:col-span-1">

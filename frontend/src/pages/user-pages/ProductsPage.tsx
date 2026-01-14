@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { Star, Plus, Heart } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavBarStore } from "../../stores/navbar-store";
 import FilterElement from "../../components/FilterElement";
 import ProductGrid from "../../components/ProductGrid";
 import { useCartStore } from "../../stores/cart-store";
+import { useQuery } from "@tanstack/react-query";
+import { getProductsByShop } from "../../api/products-api";
+import { productService } from "../../services/product";
+import type { ProductSchema2 } from "../../types/product";
+import { useNavigate } from "react-router-dom";
 type Product = {
   product_id: string;
   product_name: string;
@@ -18,6 +22,7 @@ type Product = {
   }[];
   tags: string[];
 };
+
 // Mock data based on your schema
 const mockProducts: Product[] = [
   {
@@ -33,7 +38,10 @@ const mockProducts: Product[] = [
           "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=500",
       },
     ],
-    colors: [{ color_id: "8", color_name: "Red" }, { color_id: "9", color_name: "Pink" }], // Mock data for colors"Red", "Pink"],
+    colors: [
+      { color_id: "8", color_name: "Red" },
+      { color_id: "9", color_name: "Pink" },
+    ], // Mock data for colors"Red", "Pink"],
     tags: ["Valentine", "Romance"],
   },
   {
@@ -49,7 +57,10 @@ const mockProducts: Product[] = [
           "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500",
       },
     ],
-    colors: [{ color_id: "1", color_name: "Yellow" }, { color_id: "2", color_name: "Orange" }],
+    colors: [
+      { color_id: "1", color_name: "Yellow" },
+      { color_id: "2", color_name: "Orange" },
+    ],
     tags: ["Spring", "Birthday"],
   },
   {
@@ -81,7 +92,10 @@ const mockProducts: Product[] = [
           "https://images.unsplash.com/photo-1463320726281-696a485928c7?w=500",
       },
     ],
-    colors: [{ color_id: "3", color_name: "White" }, { color_id: "4", color_name: "Pink" }],
+    colors: [
+      { color_id: "3", color_name: "White" },
+      { color_id: "4", color_name: "Pink" },
+    ],
     tags: ["Wedding", "Elegant"],
   },
   {
@@ -113,40 +127,72 @@ const mockProducts: Product[] = [
           "https://images.unsplash.com/photo-1551738808-2d0a1f3c6e02?w=500",
       },
     ],
-    colors: [{ color_id: "6", color_name: "Purple" }, { color_id: "3", color_name: "White" }],
+    colors: [
+      { color_id: "6", color_name: "Purple" },
+      { color_id: "3", color_name: "White" },
+    ],
     tags: ["Gift", "Premium"],
   },
 ];
 
-const mockShop = {
-  shop_name: "Blooming Dreams",
-  shop_address: "123 Flower Street, Garden City",
-  shop_phone: "+1 (555) 123-4567",
-  shop_open: 540,
-  shop_close: 1290,
-};
+const ProductsPage = ({ setCurrentPage, setSelectedProduct }: any) => {
+  const navigate= useNavigate()
 
-const ProductsPage = ({
-  setCurrentPage,
-  setSelectedProduct,
-}: any) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const categories = [
-    "All",
-    "Bouquets",
-    "Arrangements",
-    "Premium",
-    "Mixed",
-    "Potted",
-  ];
   const { setCartItemCount, cartItemCount } = useNavBarStore();
+  const { addItem } = useCartStore();
+
+  const handleSelectProduct = (product: ProductSchema2) => {
+    navigate(`/productInfo/${product.product_id}`);
+  }
+  // const categories = [
+  //   "All",
+  //   "Bouquets",
+  //   "Arrangements",
+  //   "Premium",
+  //   "Mixed",
+  //   "Potted",
+  // ];
+  const categories = ["All", "Single", "Set", "Premium", "Mixed", "Potted"];
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const productRes = await productService.getProducts();
+      return productRes.data;
+    },
+    refetchOnWindowFocus: true,
+    staleTime: 0 ,
+    gcTime: 0
+  });
+  // const [data, setData] = useState<ProductSchema2[]>([]);
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const products = await productService.getProducts();
+  //       setData(products.data);
+  //       console.log("Fetched products:", products);
+  //     } catch (error) {
+  //       console.error("Error fetching products:", error);
+  //     }
+  //   };
+  //   fetchProducts();
+  // }, []);
+  useEffect(() => {
+    console.log("Products data updated:", data);
+  }, [data]);
+
+
+
+  if (isError) {
+    return <div>Error: {(error as Error).message}</div>;
+  }
+
   const filteredProducts =
     selectedCategory === "All"
-      ? mockProducts
-      : mockProducts.filter(
-          (p) => p.category.category_name === selectedCategory
+      ? data
+      : data?.filter(
+          (p: ProductSchema2) => p.category.category_name === selectedCategory
         );
-  const {addItem} = useCartStore();
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -161,14 +207,14 @@ const ProductsPage = ({
         />
 
         {/* Products Grid */}
-        <ProductGrid
+        {!isLoading && <ProductGrid
           filteredProducts={filteredProducts}
           setCurrentPage={setCurrentPage}
-          setSelectedProduct={setSelectedProduct}
+          setSelectedProduct={handleSelectProduct}
           setCartItemCount={setCartItemCount}
           cartItemCount={cartItemCount}
           addItem={addItem}
-        />
+        />} 
       </div>
     </div>
   );

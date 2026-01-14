@@ -1,12 +1,9 @@
 import { create } from "zustand";
-import type { Product } from "../types/product";
-import type  { CartItem } from "../types/cart";
-
-
+import type  { CartTemp } from "../types/cart";
 
 type CartState = {
-  items: CartItem[];
-  addItem: (item: Product,quantity: number) => void;
+  items: CartTemp[];
+  addItem: (item_id:{product_id: string}, quantity: number) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   removeFromCart: (productId: string) => void;
   cartItemCount: number;
@@ -20,12 +17,12 @@ export const useCartStore = create<CartState>((set, get) => ({
     const { items } = get();
     localStorage.setItem("cartItems", JSON.stringify(items));
   },  
-  addItem: (newItem,quantity: number) => {
+  addItem: (newItem: {product_id: string},quantity: number) => {
     set((state) =>{
       const existingItemIndex = state.items.findIndex(
         (cartItem) => cartItem.product_id === newItem.product_id
       );
-      let updatedItems: CartItem[] = [];
+      let updatedItems: CartTemp[] = [];
       if (existingItemIndex >= 0) {
         // Update quantity if item already exists
         updatedItems = state.items.map((cartItem, index) =>

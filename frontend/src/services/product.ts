@@ -1,18 +1,23 @@
 import { api } from "./api";
-
+import type { ProductPreview } from "../types/product";
 export const productService = {
     getProductById: async (productId: string) => {
         const response = await api.get(`/product/${productId}`);
         return response.data;
     },
+    getProductByIds: async (productIds: string[]) => {
+        const response = await api.post(`/product/ids`, { product_ids: productIds });
+        return response.data;
+    },
     getProducts: async () => {
-        const response = await api.get("/product");
+        const response = await api.get("/product/");
         return response.data;
     },
     addProduct: async (product: any) => {
-        const response = await api.post("/product", product);
+        const response = await api.post("/product/", product);
         return response.data;
     },
+
     deleteProduct: async (productId: string) => {
         const response = await api.delete(`/product/${productId}`);
         return response.data;
