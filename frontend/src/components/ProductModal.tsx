@@ -3,20 +3,23 @@ import { X, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { generateMockData } from '../mock/shop-mock';
 const ProductModal = ({ product, onClose, onSave }:any) => {
-    const [formData, setFormData] = useState(product || {
+    const [formData, setFormData] = useState<any>(product || {
+      product_id: '',
       product_name: '',
       product_description: '',
       product_price: '',
       product_stock: '',
-      category_id: '',
-      colors: [],
-      tags: [],
-      images: []
     });
+    const [category,setCategory] = useState<string>(product ? product.category.category_name : '');
+    const [colors, setColors] = useState<number[]>(product ? product.colors : []);  
+    const [tags, setTags] = useState<number[]>(product ? product.tags : []);
+    const [images, setImages] = useState<File[]>(product ? product.productImage : []);
+
     const data = generateMockData();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      
       onSave(formData);
       onClose();
     };
@@ -82,7 +85,7 @@ const ProductModal = ({ product, onClose, onSave }:any) => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                 <select
                   value={formData.category_id}
-                  onChange={(e) => setFormData({ ...formData, category_id: parseInt(e.target.value) })}
+                  onChange={(e) => setCategory({ ...formData, category_id: parseInt(e.target.value) })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   required
                 >
@@ -100,12 +103,12 @@ const ProductModal = ({ product, onClose, onSave }:any) => {
                     <label key={color.color_id} className="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
                       <input
                         type="checkbox"
-                        checked={formData.colors?.includes(color.color_id)}
+                        checked={colors?.includes(color.color_id)}
                         onChange={(e) => {
                           const newColors = e.target.checked
-                            ? [...(formData.colors || []), color.color_id]
-                            : formData.colors.filter((id: number) => id !== color.color_id);
-                          setFormData({ ...formData, colors: newColors });
+                            ? [...colors, color.color_id]
+                            : colors.filter((id: number) => id !== color.color_id);
+                          setColors(newColors);
                         }}
                         className="rounded text-pink-600"
                       />
@@ -122,12 +125,12 @@ const ProductModal = ({ product, onClose, onSave }:any) => {
                     <label key={tag.tag_id} className="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
                       <input
                         type="checkbox"
-                        checked={formData.tags?.includes(tag.tag_id)}
+                        checked={tags?.includes(tag.tag_id)}
                         onChange={(e) => {
                           const newTags = e.target.checked
-                            ? [...(formData.tags || []), tag.tag_id]
-                            : formData.tags.filter((id: number) => id !== tag.tag_id);
-                          setFormData({ ...formData, tags: newTags });
+                            ? [...tags, tag.tag_id]
+                            : tags.filter((id: number) => id !== tag.tag_id);
+                          setTags(newTags);
                         }}
                         className="rounded text-pink-600"
                       />
@@ -137,17 +140,53 @@ const ProductModal = ({ product, onClose, onSave }:any) => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Images (up to 5)</label>
-                <div className="flex gap-2">
-                  <button type="button" className="w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center hover:border-pink-500 hover:bg-pink-50">
+              <div className='space-y-4'>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Images (up to 4)</label>
+                </div>
+                <div className='flex '>
+                  {images.map((image, index) => (
+                    <div key={index} className="relative mr-4">
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt={`Product ${index + 1}`}
+                        className="w-24 h-24 object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newImages = images.filter((_, i) => i !== index);
+                          setImages(newImages);
+                        }}
+                        className="absolute top-1 right-1 bg-white rounded-full p-1 shadow hover:bg-gray-100"
+                      >
+                        <X className="w-4 h-4 text-gray-600" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2 ">
+                  <button type="button" className="relative w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center hover:border-pink-500 hover:bg-pink-50">
                     <Upload className="w-6 h-6 text-gray-400" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          const selectedFiles = Array.from(e.target.files).slice(0, 4 - images.length);
+                          setImages([...images, ...selectedFiles]);
+                        }
+                      }}
+                    />
+                    
                   </button>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">Click to upload images. You can reorder them by dragging.</p>
               </div>
 
-              <div className="flex gap-3 pt-4">
+              <div className="flex gap-3">
                 <button type="submit" className="flex-1 bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700">
                   {product ? 'Save Changes' : 'Add Product'}
                 </button>
