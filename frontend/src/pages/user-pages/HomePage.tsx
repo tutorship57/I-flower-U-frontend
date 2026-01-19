@@ -12,7 +12,7 @@ type Product = {
   tags: string[];
 };
 const mockShop = {
-  shop_name: "Blooming Dreams",
+  shop_name: "IflowerU",
   shop_address: "123 Flower Street, Garden City",
   shop_phone: "+1 (555) 123-4567",
   shop_open: 540,
@@ -31,7 +31,7 @@ const mockProducts: Product[] = [
     images: [
       {
         image_url:
-          "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=500",
+          "https://scontent.fbkk6-1.fna.fbcdn.net/v/t51.75761-15/504077414_18183206374319731_8793148818593164494_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=o-WqkqA97i8Q7kNvwHHPP9Y&_nc_oc=AdnwgTYCBShUIsLmACsU76eptXHgKbslq5ATJPVEkCNhXkyD_KlPxng5StC79LfG-cI&_nc_zt=23&_nc_ht=scontent.fbkk6-1.fna&_nc_gid=0gWdQCrcfQB9l5DFOcTl4A&oh=00_Afpr43_vJmJVUhJTG0Wh8BWg_-ubzeOE3ZD9YyGtKvMWyQ&oe=69711751",
       },
     ],
     colors: ["Red", "Pink"],
@@ -126,11 +126,11 @@ const HomePage = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-pink-50 to-rose-50 py-20">
+      <div className="relative bg-pink-50 pb-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-5xl font-bold text-gray-900 mb-6">
+              <h1 className="text-5xl font-bold text-gray-900 mb-6 ">
                 Fresh Flowers For Every
                 <span className="block text-rose-500">Occasion</span>
               </h1>
@@ -150,18 +150,36 @@ const HomePage = () => {
                 </button>
               </div>
             </div>
-            <div className="relative">
+            <div className="relative pt-5 z-30  ">
               <img
-                src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600"
+                src="https://png.pngtree.com/png-clipart/20240902/original/pngtree-free-psd-cartoon-flower-bouquet-png-image_15915324.png"
                 alt="Beautiful flowers"
-                className="rounded-3xl shadow-2xl"
+                className="drop-shadow-2xl"
               />
             </div>
           </div>
         </div>
+
+        {/* ส่วนโค้ง */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-20">
+          <svg
+            data-name="Layer 1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 900 120"
+            preserveAspectRatio="none"
+            className="relative block w-full h-[350px]"
+          >
+            <path
+              d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+              className="fill-white"
+            ></path>
+          </svg>
+        </div>
+
       </div>
 
-      {/* Categories */}
+      
+      {/*Shop by Categories */}
       <div className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-12">
@@ -184,7 +202,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Featured Products */}
+      {/* Featured Flowers */}
       <div className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-12">
@@ -239,7 +257,35 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Shop Info */}
+      {/* Recommend */}
+      <div className="py-16 bg-white mb-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative h-[535px] group ">
+                {/* Background Image */}
+                <img 
+                    src="https://img.pikbest.com/wp/202342/spring-renewal-stunning-tulip-blossoming-on-sun-drenched-background-a-perfect-symbol-of-love-and_9944951.jpg!bw700" 
+                    alt="Field of tulips" 
+                    className="absolute top-0 left-0 w-[920px] h-[456px] object-cover shadow-2xl rounded-tr-[5rem] rounded-bl-[5rem] transition-transform duration-700"
+                />
+                
+                {/* Floating Card Content */}
+                <div className="absolute bottom-0 right-0 md:bottom-8 md:right-8 bg-pink-50 p-8 md:rounded-t-[4rem] rounded-br-[4rem] w-full md:w-[400px] shadow-xl">
+                    <h3 className="text-center text-2xl font-bold text-gray-900 mb-5">Can't decide yet?</h3>
+                    <p className="text-center text-gray-600 mb-8 text-sm leading-relaxed">
+                        We'll help you find flowers that feel just right.
+                    </p>
+                    <button className="w-full py-3 bg-rose-500 text-white rounded-full font-semibold hover:bg-rose-600 transition shadow-md">
+                        Get Recommendation
+                    </button>
+                </div>
+            </div>
+        </div>
+      </div>
+
+    
+
+
+      {/* Shop Info
       <div className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 text-center">
@@ -260,7 +306,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
