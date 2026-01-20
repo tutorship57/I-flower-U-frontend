@@ -4,7 +4,7 @@ import { useCartStore } from '../../stores/cart-store';
 import { useNavBarStore } from '../../stores/navbar-store';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { productService } from '../../services/product';
+import { productService } from '../../services/product-service/product';
 import type { ProductSchema2 } from '../../types/product';
 
 

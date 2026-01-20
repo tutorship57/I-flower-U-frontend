@@ -4,7 +4,7 @@ import FilterElement from "../../components/FilterElement";
 import ProductGrid from "../../components/ProductGrid";
 import { useCartStore } from "../../stores/cart-store";
 import { useQuery } from "@tanstack/react-query";
-import { productService } from "../../services/product";
+import { productService } from "../../services/product-service/product";
 import type { ProductSchema2 } from "../../types/product";
 import { useNavigate } from "react-router-dom";
 

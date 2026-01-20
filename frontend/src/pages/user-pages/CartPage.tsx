@@ -2,7 +2,7 @@ import { ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 import { useCartStore } from '../../stores/cart-store';
 import { useNavBarStore } from '../../stores/navbar-store';
 import { useQuery } from '@tanstack/react-query';
-import { productService } from '../../services/product';
+import { productService } from '../../services/product-service/product';
 import type { ProductPreview } from '../../types/product';
 // Shopping Cart Page
 const CartPage = () => {
