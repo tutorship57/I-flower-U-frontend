@@ -8,7 +8,7 @@ import type { ProductPreview } from '../../types/product';
 const CartPage = () => {
   const { items, updateQuantity, removeFromCart } = useCartStore();
   const { data:productPreview, isLoading, error } = useQuery<[ProductPreview]>({
-    queryKey: ['cart-items-details', items],
+    queryKey: ['cart-items-details'],
     queryFn: async () => {
       // Fetch detailed product info for each item in the cart
       const productDetails =await productService.getProductByIds(

@@ -1,5 +1,5 @@
 import { api } from "./api";
-import type { ProductPreview } from "../types/product";
+
 export const productService = {
     getProductById: async (productId: string) => {
         const response = await api.get(`/product/${productId}`);
@@ -13,11 +13,10 @@ export const productService = {
         const response = await api.get("/product/");
         return response.data;
     },
-    addProduct: async (product: any) => {
-        const response = await api.post("/product/", product);
+    addProduct: async (product:{product_name: string, product_description: string, product_price: number, product_stock: number}) => {
+        const response = await api.post("/product/", {data: product});
         return response.data;
     },
-
     deleteProduct: async (productId: string) => {
         const response = await api.delete(`/product/${productId}`);
         return response.data;
@@ -25,52 +24,34 @@ export const productService = {
 }
 
 
-export const categoryService = {
-    getCategories: async () => {
-        const response = await api.get("/category");
+export const productCategoryService = {
+    getCategories: async (product_id: string) => {
+        const response = await api.get(`/product/${product_id}/category/`);
         return response.data;
     },
-    addCategory: async (category: any) => {
-        const response = await api.post("/category", category);
+    
+    getCategoryById: async (product_id: string, categoryId: string) => {
+        const response = await api.get(`/product/${product_id}/category/${categoryId}`);
         return response.data;
     },
-    deleteCategory: async (categoryId: string) => {
-        const response = await api.delete(`/category/${categoryId}`);
+    addCategory: async (product_id: string, category: {category_id: string}[]) => {
+        const response = await api.post(`/product/${product_id}/category/`,{ categories: category });
         return response.data;
     },
-    getCategoryById: async (categoryId: string) => {
-        const response = await api.get(`/category/${categoryId}`);
-        return response.data;
-    }
-}
-
-export const tagService = {
-    getTags: async () => {
-        const response = await api.get("/tag");
-        return response.data;
-    },
-    addTag: async (tag: any) => {
-        const response = await api.post("/tag", tag);
-        return response.data;
-    },
-    deleteTag: async (tagId: string) => {
-        const response = await api.delete(`/tag/${tagId}`);
-        return response.data;
-    },
-    getTagById: async (tagId: string) => {
-        const response = await api.get(`/tag/${tagId}`);
+    deleteCategory: async (product_id: string, categoryId: string) => {
+        const response = await api.delete(`/product/${product_id}/category/${categoryId}`);
         return response.data;
     }
 }
 
 
-export const colorService = {
-    getColors: async () => {
-        const response = await api.get("/color");
+export const productColorService = {
+    getColors: async (product_id: string) => {
+        const response = await api.get(`/product/${product_id}/color/`);
         return response.data;
     },
-    addColor: async (color: any) => {
-        const response = await api.post("/color", color);
+    addColors: async (product_id: string,data:{color_id: string}[]) => {
+        const response = await api.post(`/product/${product_id}/color`, { colors: data });
         return response.data;
     },
     deleteColor: async (colorId: string) => {
@@ -83,21 +64,44 @@ export const colorService = {
     }
 }
 
-export const imageService = {
-    getImages: async () => {
-        const response = await api.get("/image");
+export const productImageService = {
+    getImages: async (product_id: string) => {
+        const response = await api.get(`/product/${product_id}/image`);
         return response.data;
     },
-    addImage: async (image: any) => {
-        const response = await api.post("/image", image);
+    addImages: async (product_id: string, images: File[]) => {
+        const response = await api.post(`/product/${product_id}/image`, images);
         return response.data;
     },
-    deleteImage: async (imageId: string) => {
-        const response = await api.delete(`/image/${imageId}`);
+    deleteImage: async (product_id: string, imageId: string) => {
+        const response = await api.delete(`/product/${product_id}/image/${imageId}`);
         return response.data;
     },
-    getImageById: async (imageId: string) => {
-        const response = await api.get(`/image/${imageId}`);
+    getImageById: async (product_id: string, imageId: string) => {
+        const response = await api.get(`/product/${product_id}/image/${imageId}`);
+        return response.data;
+    }
+}
+
+export const productTagsService = {
+    getProductTags: async (product_id: string) => {
+        const response = await api.get(`/product/${product_id}/tag/`);
+        return response.data;
+    },
+    getProductTagById: async (product_id: string, tagId: string) => {  
+        const response = await api.get(`/product/${product_id}/tag/${tagId}`);
+        return response.data;
+    },
+    addProductTags: async (product_id: string,tags:{tag_id: string}[]) => {
+        const response = await api.post(`/product/${product_id}/tag/`, { tags });
+        return response.data;
+    },
+    updateProductTags: async (product_id: string,tags:{tag_id: string}[]) => {
+        const response = await api.put(`/product/${product_id}/tag/`, { tags });
+        return response.data;
+    },
+    deleteProductTag: async (product_id: string, tagId: string) => {
+        const response = await api.delete(`/product/${product_id}/tag/${tagId}`);
         return response.data;
     }
 }

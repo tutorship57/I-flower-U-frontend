@@ -2,7 +2,7 @@ import React from 'react'
 import { X, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { generateMockData } from '../mock/shop-mock';
-const ProductModal = ({ product, onClose, onSave }:any) => {
+const ProductModal = ({ product, onClose,categories,tagEvents,isOpen}:any) => {
     const [formData, setFormData] = useState<any>(product || {
       product_id: '',
       product_name: '',
@@ -20,7 +20,6 @@ const ProductModal = ({ product, onClose, onSave }:any) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       
-      onSave(formData);
       onClose();
     };
 
