@@ -10,8 +10,9 @@ export const productCategoryService = {
         const response = await api.get(`/product/${product_id}/category/${categoryId}`);
         return response.data;
     },
-    addCategory: async (product_id: string, category: {category_id: string}[]) => {
-        const response = await api.post(`/product/${product_id}/category/`,{ categories: category });
+    addCategory: async (product_id: string, category_id: string) => {
+        const data = { category_id: category_id };
+        const response = await api.post(`/product/${product_id}/category/`, data);
         return response.data;
     },
     deleteCategory: async (product_id: string, categoryId: string) => {

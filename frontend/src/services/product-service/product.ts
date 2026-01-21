@@ -14,7 +14,7 @@ export const productService = {
         return response.data;
     },
     addProduct: async (product:{product_name: string, product_description: string, product_price: number, product_stock: number}) => {
-        const response = await api.post("/product/", {data: product});
+        const response = await api.post("/product/", {product});
         return response.data;
     },
     deleteProduct: async (productId: string) => {
