@@ -2,24 +2,38 @@ import React from 'react'
 import { X, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { generateMockData } from '../mock/shop-mock';
+import { productService } from '../services/product-service/product';
+import { productImageService } from '../services/product-service/product-image.service';
+import { productColorService } from '../services/product-service/product-color.service';
+import { productTagsService } from '../services/product-service/product-tag.service';
 const ProductModal = ({ product, onClose,categories,tagEvents,isOpen}:any) => {
     const [formData, setFormData] = useState<any>(product || {
-      product_id: '',
       product_name: '',
       product_description: '',
-      product_price: '',
-      product_stock: '',
+      product_price: 0,
+      product_stock: 0,
+      shop_id: 'cmk8c98550000tm8vt92a3d4q',
+      category_id: 1,
     });
     const [category,setCategory] = useState<string>(product ? product.category.category_name : '');
-    const [colors, setColors] = useState<number[]>(product ? product.colors : []);  
-    const [tags, setTags] = useState<number[]>(product ? product.tags : []);
+    const [colors, setColors] = useState<{color_id: number}[]>(product ? product.colors : []);  
+    const [tags, setTags] = useState<{tag_id: number}[]>(product ? product.tags : []);
     const [images, setImages] = useState<File[]>(product ? product.productImage : []);
-
+    
     const data = generateMockData();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      
+      const productResponse = await productService.addProduct(formData);
+      const data = productResponse.data;
+      const {product_id} = data;
+      console.log("this is product id",product_id);
+      await Promise.all([
+        // productCategoryService.addCategory(product_id, String(category)),
+        productColorService.addColors(product_id, colors),
+        productTagsService.addProductTags(product_id, tags),
+        productImageService.addImages(product_id, images),
+      ]);
       onClose();
     };
 
@@ -63,7 +77,7 @@ const ProductModal = ({ product, onClose,categories,tagEvents,isOpen}:any) => {
                     type="number"
                     step="0.01"
                     value={formData.product_price}
-                    onChange={(e) => setFormData({ ...formData, product_price: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, product_price: parseFloat(e.target.value) })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     required
                   />
@@ -73,7 +87,7 @@ const ProductModal = ({ product, onClose,categories,tagEvents,isOpen}:any) => {
                   <input
                     type="number"
                     value={formData.product_stock}
-                    onChange={(e) => setFormData({ ...formData, product_stock: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, product_stock: parseInt(e.target.value) })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     required
                   />
