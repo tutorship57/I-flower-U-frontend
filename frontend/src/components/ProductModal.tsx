@@ -6,21 +6,25 @@ import { productService } from '../services/product-service/product';
 import { productImageService } from '../services/product-service/product-image.service';
 import { productColorService } from '../services/product-service/product-color.service';
 import { productTagsService } from '../services/product-service/product-tag.service';
-const ProductModal = ({ product, onClose,categories,tagEvents,isOpen}:any) => {
+import { useCategories } from '../queries/category/category.query';
+import { useColors } from '../queries/color/color.query';
+const ProductModal = ({ product, onClose,categories,colors,tagEvents,isOpen}:any) => {
     const [formData, setFormData] = useState<any>(product || {
       product_name: '',
       product_description: '',
       product_price: 0,
       product_stock: 0,
       shop_id: 'cmk8c98550000tm8vt92a3d4q',
-      category_id: 1,
+      category_id: 0,
     });
-    const [category,setCategory] = useState<string>(product ? product.category.category_name : '');
-    const [colors, setColors] = useState<{color_id: number}[]>(product ? product.colors : []);  
-    const [tags, setTags] = useState<{tag_id: number}[]>(product ? product.tags : []);
+    const [selectedColors, setSelectedColors] = useState<{color_id: number}[]>(product ? product.colors : []);
+    console.log("🚀 ~ ProductModal ~ selectedColors:", selectedColors)
+    const [category,setCategory] = useState<string>(product && product.category ? product.category.category_name : ''); 
+    const [selectedTags, setSelectedTags] = useState<{tag_id: number}[]>(product ? product.tags : []);
+    console.log("🚀 ~ ProductModal ~ selectedTags:", selectedTags)
     const [images, setImages] = useState<File[]>(product ? product.productImage : []);
-    
     const data = generateMockData();
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -97,13 +101,13 @@ const ProductModal = ({ product, onClose,categories,tagEvents,isOpen}:any) => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                 <select
-                  value={formData.category_id}
-                  onChange={(e) => setCategory({ ...formData, category_id: parseInt(e.target.value) })}
+                  value={category ? category : ''}
+                  onChange={(e) => setCategory(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   required
                 >
-                  <option value="">Select category</option>
-                  {data.categories.map(cat => (
+                  <option value={''} className={''}>Select category</option>
+                  {categories?.map(cat => (
                     <option key={cat.category_id} value={cat.category_id}>{cat.category_name}</option>
                   ))}
                 </select>
@@ -112,16 +116,17 @@ const ProductModal = ({ product, onClose,categories,tagEvents,isOpen}:any) => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Colors</label>
                 <div className="flex flex-wrap gap-2">
-                  {data.colors.map(color => (
+                  {/* {data.colors.map(color => ( */}
+                    {colors.map(color => (
                     <label key={color.color_id} className="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
                       <input
                         type="checkbox"
-                        checked={colors?.includes(color.color_id)}
+                        checked={selectedColors?.includes(color.color_id)}
                         onChange={(e) => {
                           const newColors = e.target.checked
-                            ? [...colors, color.color_id]
-                            : colors.filter((id: number) => id !== color.color_id);
-                          setColors(newColors);
+                            ? [...selectedColors, color.color_id]
+                            : selectedColors.filter((id: number) => id !== color.color_id);
+                          setSelectedColors(newColors);
                         }}
                         className="rounded text-pink-600"
                       />
@@ -134,16 +139,16 @@ const ProductModal = ({ product, onClose,categories,tagEvents,isOpen}:any) => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Event Tags</label>
                 <div className="flex flex-wrap gap-2">
-                  {data.tagEvents.map(tag => (
+                  {tagEvents.map(tag => (
                     <label key={tag.tag_id} className="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
                       <input
                         type="checkbox"
-                        checked={tags?.includes(tag.tag_id)}
+                        checked={selectedTags?.includes(tag.tag_id)}
                         onChange={(e) => {
                           const newTags = e.target.checked
-                            ? [...tags, tag.tag_id]
-                            : tags.filter((id: number) => id !== tag.tag_id);
-                          setTags(newTags);
+                            ? [...selectedTags, tag.tag_id]
+                            : selectedTags.filter((id: number) => id !== tag.tag_id);
+                          setSelectedTags(newTags);
                         }}
                         className="rounded text-pink-600"
                       />

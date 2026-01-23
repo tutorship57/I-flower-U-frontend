@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import { productService } from "../../services/product-service/product";
 import type { ProductSchema2 } from "../../types/product";
 import { useNavigate } from "react-router-dom";
+import { useProducts } from "../../queries/product/product.query";
+import { useCategories } from "../../queries/category/category.query";
 
 const ProductsPage = () => {
   const navigate= useNavigate()
@@ -26,33 +28,14 @@ const ProductsPage = () => {
   //   "Mixed",
   //   "Potted",
   // ];
-  const categories = ["All", "Single", "Set", "Premium", "Mixed", "Potted"];
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const productRes = await productService.getProducts();
-      return productRes.data;
-    },
-    refetchOnWindowFocus: true,
-    staleTime: 0 ,
-    gcTime: 0
-  });
-  // const [data, setData] = useState<ProductSchema2[]>([]);
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const products = await productService.getProducts();
-  //       setData(products.data);
-  //       console.log("Fetched products:", products);
-  //     } catch (error) {
-  //       console.error("Error fetching products:", error);
-  //     }
-  //   };
-  //   fetchProducts();
-  // }, []);
+  // const categories = ["All", "Single", "Set", "Premium", "Mixed", "Potted"];
+  const {data: categories, isLoading:isCategoriesLoading,isError:isCategoriesError, error:categoriesError} = useCategories();
+  const { data, isLoading, isError, error } = useProducts();
+
   useEffect(() => {
     console.log("Products data updated:", data);
-  }, [data]);
+    console.log("Categories data:", categories);
+  }, [data,categories]);
 
 
 
@@ -73,11 +56,11 @@ const ProductsPage = () => {
         <h1 className="text-4xl font-bold mb-8">Our Collection</h1>
 
         {/* Filters */}
-        <FilterElement
+        {!isCategoriesLoading && <FilterElement
           categories={categories}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
-        />
+        />}
 
         {/* Products Grid */}
         {!isLoading && <ProductGrid

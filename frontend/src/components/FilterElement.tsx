@@ -7,20 +7,31 @@ interface CategoriesProps {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 const FilterElement = ({ categories, selectedCategory, setSelectedCategory }: CategoriesProps) => {
-
   return (
      <div className="mb-8 flex flex-wrap gap-3">
-          {categories.map((cat: any) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
+           <button
+              key={0}
+              onClick={() => setSelectedCategory('All')}
               className={`px-6 py-2 rounded-full transition ${
-                selectedCategory === cat
+                selectedCategory === 'All'
                   ? 'bg-rose-500 text-white'
                   : 'bg-white text-gray-700 hover:bg-rose-50'
               }`}
               >
-              {cat}
+              {'All'}
+            </button>
+          {categories.map((cat: any) => (
+
+            <button
+              key={cat.category_id}
+              onClick={() => setSelectedCategory(cat.category_name)}
+              className={`px-6 py-2 rounded-full transition ${
+                selectedCategory === cat.category_name
+                  ? 'bg-rose-500 text-white'
+                  : 'bg-white text-gray-700 hover:bg-rose-50'
+              }`}
+              >
+              {cat.category_name}
             </button>
           ))}
     </div>
