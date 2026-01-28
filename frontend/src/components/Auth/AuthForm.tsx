@@ -5,14 +5,14 @@ interface AuthFormProps {
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     isSignUp:boolean;
     formData:{
-        email:string;
-        password:string;
-        name:string;
+        user_email:string;
+        user_password:string;
+        user_name:string;
     };
     setFormData: React.Dispatch<React.SetStateAction<{
-        email: string;
-        password: string;
-        name: string;
+        user_email: string;
+        user_password: string;
+        user_name: string;
     }>>;
 }
 const AuthForm = ({handleSubmit,isSignUp,formData,setFormData}:AuthFormProps) => {
@@ -22,9 +22,9 @@ const AuthForm = ({handleSubmit,isSignUp,formData,setFormData}:AuthFormProps) =>
                   <InputField
                     label="Full Name"
                     type="text"
-                    value={formData.name}
+                    value={formData.user_name}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setFormData({ ...formData, name: e.target.value })
+                      setFormData({ ...formData, user_name: e.target.value })
                     }
                     placeholder="Edward Johnson"
                     required={true}
@@ -33,9 +33,9 @@ const AuthForm = ({handleSubmit,isSignUp,formData,setFormData}:AuthFormProps) =>
                 <InputField
                   label="Email Address"
                   type="email"
-                  value={formData.email}
+                  value={formData.user_email}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setFormData({ ...formData, email: e.target.value })
+                    setFormData({ ...formData, user_email: e.target.value })
                   }
                   placeholder="you@example.com"
                   required={true}
@@ -44,9 +44,9 @@ const AuthForm = ({handleSubmit,isSignUp,formData,setFormData}:AuthFormProps) =>
                 <InputField
                   label="Password"
                   type="password"
-                  value={formData.password}
+                  value={formData.user_password}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setFormData({ ...formData, password: e.target.value })
+                    setFormData({ ...formData,user_password: e.target.value })
                   }
                   placeholder="••••••••"
                   required={true}

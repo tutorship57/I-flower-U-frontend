@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { ShoppingCart, Search, User, Heart, Menu, X} from 'lucide-react';
+import { ShoppingCart, Search, User, Heart, Menu, X } from 'lucide-react';
+import { LogOut } from "lucide-react"; //เพิ่ม
 import { useNavBarStore } from '../stores/navbar-store';
 import { useAuthStore } from '../stores/auth-store';
 import { useCartStore } from '../stores/cart-store';
 import { useNavigate } from 'react-router';
+
+
+
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const {currentPage,setCurrentPage} = useNavBarStore();
-  const {isLoggedIn} = useAuthStore();
+  // const {isLoggedIn} = useAuthStore();
+  const { isLoggedIn, user, logout} = useAuthStore(); //แก้จากอันบน
   const {items} = useCartStore();
   const navigate = useNavigate();
   useEffect(() => {
@@ -65,12 +70,47 @@ const Navbar = () => {
                 </span>
               )}
             </button>
-            <button
+            {/* <button
               onClick={() => isLoggedIn ? setCurrentPage('profile') : setCurrentPage('login')}
               className="p-2 hover:bg-gray-100 rounded-full transition"
             >
               <User className="w-5 h-5 text-gray-700" />
-            </button>
+            </button> */}
+
+            
+            {!isLoggedIn ? (
+              <button
+                onClick={() => setCurrentPage('login')}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <User className="w-5 h-5 text-gray-700" />
+              </button>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setCurrentPage('profile')}
+                  className="flex items-center space-x-1 px-3 py-1 rounded-full hover:bg-gray-100"
+                >
+                  <User className="w-5 h-5 text-gray-700" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {user}
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    logout();
+                    setCurrentPage("home");
+                  }}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                  title="Logout"
+                >
+                  <LogOut className="w-5 h-5 text-gray-700" />
+                </button>
+              </div>
+            )}
+
+
           </div>
 
           {/* Mobile Menu Button */}
