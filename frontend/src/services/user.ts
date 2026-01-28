@@ -12,5 +12,9 @@ export const userService = {
     deleteUser: async (userId: string) => {
         const response = await api.delete(`/user/${userId}`);
         return response.data;
+    },
+    getProfile: async () => {
+        const response = await api.get('/user/me');
+        return response.data;
     }
 }

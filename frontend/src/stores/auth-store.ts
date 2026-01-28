@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import axios from "axios";
 import type { Role } from "../types/role";
+import { userService } from "../services/user";
 type AuthState = {
     loading: boolean;
     user: string | null;  // หรืออาจจะเป็น object ที่เก็บข้อมูลผู้ใช้เพิ่มเติม
@@ -13,7 +13,7 @@ type UserData = {
     user_id: string;
     user_username: string;
     user_email: string;
-    Role:{
+    role:{
         role_id: string;
         role_name: Role;
     }
@@ -28,15 +28,19 @@ export const useAuthStore = create<AuthState>((set) => ({
   fetchCurrentUser: async () => {
     set({ loading: true });
     try {
-      const res= await axios.get("/api/me", { withCredentials: true });
+      const res= await userService.getProfile();
       const data: UserData = res.data;
+      console.log(data);
       set({
         user: data.user_username,
         isLoggedIn: true,
         loading: false,
-        role: data.Role.role_name
+        role: data.role.role_name
       });
-    } catch {
+      console.log("Active session found");
+    } catch(err) {
+      console.log(err)
+      console.log("No active session");
       set({ user: null, isLoggedIn: false, loading: false });
     }
   },

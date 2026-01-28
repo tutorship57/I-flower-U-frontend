@@ -105,7 +105,7 @@ const Navbar = () => {
                   className="p-2 hover:bg-gray-100 rounded-full"
                   title="Logout"
                 >
-                  <LogOut className="w-5 h-5 text-gray-700" />
+                  <LogOut className="w-5 h-5 text-rose-700" />
                 </button>
               </div>
             )}
