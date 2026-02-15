@@ -4,9 +4,25 @@ import { useNavBarStore } from '../../stores/navbar-store';
 import { useQuery } from '@tanstack/react-query';
 import { productService } from '../../services/product-service/product';
 import type { ProductPreview } from '../../types/product';
+import {useAuthStore} from '../../stores/auth-store';
+import { useNavigate } from 'react-router-dom';
+import { paymentService } from '../../services/payment.service';
+import { checkoutService } from '../../services/checkout.service';
+import { usePaymentRedirect } from '../../hooks/usePaymentRedirect';
+import { cartItemService } from '../../services/cart-item.service';
+import { useState,useEffect } from 'react';
 // Shopping Cart Page
 const CartPage = () => {
   const { items, updateQuantity, removeFromCart } = useCartStore();
+
+  const {user_id} = useAuthStore()
+  const {cart_id} = useCartStore()
+  const navigate = useNavigate();
+  const [order_id, setOrderId] = useState<string | null>(null);
+  const subtotal = items.reduce((sum:any, item:any) => sum + item.product_price * item.quantity, 0);
+  const shipping = 0;
+  const total = subtotal + shipping;
+  const { setCurrentPage } = useNavBarStore();
   const { data:productPreview, isLoading, error } = useQuery<[ProductPreview]>({
     queryKey: ['cart-items-details'],
     queryFn: async () => {
@@ -16,12 +32,95 @@ const CartPage = () => {
       );
       return productDetails.data;
     }
-  }
-  )
-  const subtotal = items.reduce((sum:any, item:any) => sum + item.product_price * item.quantity, 0);
-  const shipping = 0;
-  const total = subtotal + shipping;
-  const { setCurrentPage } = useNavBarStore();
+  })
+
+  usePaymentRedirect(order_id, user_id)
+
+  const handleCheckout = async () => {
+    // Handle checkout logic here
+    if(user_id === null || cart_id === null){
+      navigate('/login')
+      return
+    }
+    console.log("this is user_id",user_id)
+    console.log('Checkout clicked');
+    try {
+      const checkoutPayload = {
+      cart_id,
+      user_id
+    }
+    const checkoutResponse = await checkoutService.getCheckout(checkoutPayload)
+    console.log(checkoutResponse)
+    setOrderId(checkoutResponse.data.order_id)
+    } catch (error) {
+      console.log("CartPage Error Checkout")
+      console.log(error)
+    }
+    
+    
+  }; 
+
+  const handleRemoveOnCart = async (product_id: string) => {
+    if(user_id === null || cart_id === null){
+      removeFromCart(product_id);
+      return
+    }
+    try {
+      await cartItemService.deleteItem(cart_id,product_id)
+      removeFromCart(product_id);
+    } catch (error) {
+      console.log("CartPage Error handleRemoveOnCart")
+      console.log(error)
+    }
+  };
+
+  const handleQuantityChange = async (product_id: string, quantity: number) => {
+    if(user_id === null || cart_id === null){
+      updateQuantity(product_id, quantity);
+      return
+    }
+    try {
+      if(quantity >1){
+        await cartItemService.updateItem(cart_id,product_id,{quantity: quantity})
+        updateQuantity(product_id, quantity);
+      }
+      else{
+        await cartItemService.deleteItem(cart_id,product_id)
+        removeFromCart(product_id);
+      }
+    } catch (error) {
+      console.log("CartPage Error handleQuantityChange")
+      console.log(error)
+    }
+   
+  };
+
+  
+  
+  useEffect(() => {
+      if (!user_id || !order_id) return
+  
+      let attempts = 0
+  
+      const interval = setInterval(async () => {
+        attempts++
+        if (attempts > 5) {
+          clearInterval(interval)
+          return
+        }
+  
+        const res = await paymentService.getPaymentByOrderId(order_id)
+        if (!res.data || redirectedRef.current) return
+  
+        redirectedRef.current = true
+        clearInterval(interval)
+        window.location.href = res.data.payment_url
+      }, 2000)
+      console.log("this is order id",order_id)
+  
+      return () => clearInterval(interval)
+    }, [order_id, user_id])
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,7 +143,7 @@ const CartPage = () => {
             <div className="lg:col-span-2 space-y-4">
               {productPreview?.map((item: ProductPreview) => {
                 const quantity = items.find(i => i.product_id === item.product_id)?.quantity || 0;
-                return(
+                return  quantity > 0 && (
                  <div key={item.product_id} className="bg-white rounded-2xl shadow-md p-6">
                   <div className="flex gap-6">
                     <img
@@ -56,7 +155,7 @@ const CartPage = () => {
                       <div className="flex justify-between mb-2">
                         <h3 className="text-xl font-bold">{item.product_name}</h3>
                         <button
-                          onClick={() => removeFromCart(item.product_id)}
+                          onClick={() => handleRemoveOnCart(item.product_id)}
                           className="p-2 hover:bg-red-50 rounded-full transition"
                         >
                           <Trash2 className="w-5 h-5 text-red-500" />
@@ -66,14 +165,14 @@ const CartPage = () => {
                       <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-3">
                           <button
-                            onClick={() => updateQuantity(item.product_id, items[items.findIndex(i => i.product_id === item.product_id)].quantity - 1)}
+                            onClick={() => handleQuantityChange(item.product_id, quantity - 1)}
                             className="p-1 bg-gray-100 rounded-full hover:bg-gray-200 transition"
                           >
                             <Minus className="w-4 h-4" />
                           </button>
                           <span className="font-semibold w-8 text-center">{quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.product_id, quantity + 1)}
+                            onClick={() => handleQuantityChange(item.product_id, quantity + 1)}
                             className="p-1 bg-gray-100 rounded-full hover:bg-gray-200 transition"
                           >
                             <Plus className="w-4 h-4" />
@@ -109,7 +208,9 @@ const CartPage = () => {
                     <span className="font-bold text-rose-500">${total.toFixed(2)}</span>
                   </div>
                 </div>
-                <button className="w-full py-4 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition font-semibold text-lg mb-4">
+                <button 
+                  onClick={handleCheckout}
+                  className="w-full py-4 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition font-semibold text-lg mb-4">
                   Proceed to Checkout
                 </button>
                 <button

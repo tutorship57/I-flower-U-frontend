@@ -3,22 +3,44 @@ import { useNavBarStore } from "../../stores/navbar-store";
 import FilterElement from "../../components/FilterElement";
 import ProductGrid from "../../components/ProductGrid";
 import { useCartStore } from "../../stores/cart-store";
-import { useQuery } from "@tanstack/react-query";
-import { productService } from "../../services/product-service/product";
 import type { ProductSchema2 } from "../../types/product";
 import { useNavigate } from "react-router-dom";
 import { useProducts } from "../../queries/product/product.query";
 import { useCategories } from "../../queries/category/category.query";
+import { cartItemService } from "../../services/cart-item.service";
 
 const ProductsPage = () => {
   const navigate= useNavigate()
 
   const [selectedCategory, setSelectedCategory] = useState("All");
   const { setCartItemCount, cartItemCount } = useNavBarStore();
-  const { addItem } = useCartStore();
+  const { addItem,items } = useCartStore();
+  const { cart_id, setCart_id} = useCartStore();
 
   const handleSelectProduct = (product: ProductSchema2) => {
     navigate(`/productInfo/${product.product_id}`);
+  }
+
+  const handleAddItem = async(product: ProductSchema2,quantity: number) => {
+   const productSelected = items.find((item) => item.product_id === product.product_id);
+    const quantitySelected = productSelected ? productSelected.quantity : 0;
+    if(cart_id === null){
+      addItem(product, quantity);
+      return
+    }
+    try {
+      if(quantitySelected >= 1 && productSelected){
+        await cartItemService.updateItem(cart_id,productSelected.product_id,{quantity: quantitySelected + quantity})
+        addItem(product, quantity);
+        return
+      }
+      await cartItemService.addItems(cart_id,{quantity: quantitySelected + quantity,product_id: product.product_id,unit_price: product.product_price})
+      addItem(product, quantity);
+        
+    } catch (error) {
+      console.log("ProductsPage Error")
+      console.log(error)
+    }
   }
   // const categories = [
   //   "All",
@@ -68,7 +90,7 @@ const ProductsPage = () => {
           setSelectedProduct={handleSelectProduct}
           setCartItemCount={setCartItemCount}
           cartItemCount={cartItemCount}
-          addItem={addItem}
+          handleAddItem={handleAddItem}
         />} 
       </div>
     </div>

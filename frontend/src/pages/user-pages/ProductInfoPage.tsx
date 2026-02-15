@@ -6,6 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { productService } from '../../services/product-service/product';
 import type { ProductSchema2 } from '../../types/product';
+import { useAuthStore } from '../../stores/auth-store';
+import { cartItemService } from '../../services/cart-item.service';
 
 
 // Product Info Page
@@ -30,11 +32,53 @@ const ProductInfoPage = () => {
   const {setCurrentPage} = useNavBarStore();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const { addItem } = useCartStore();
+  const { addItem,items } = useCartStore();
   const navigate = useNavigate()
+  const { user_id } = useAuthStore()
+  const { cart_id } = useCartStore()
   const handleNavigateBacktoProducts = () => {
     navigate('/products')
   }
+  const handleClickDecreaseQuantity= ()=> {
+    if (quantity <= 1) {
+      return
+    }
+    setQuantity(quantity - 1);
+  }
+  const handleClickIncreaseQuantity = () => {
+    setQuantity(quantity + 1);
+  }
+  const handleSubmitProduct = async(product: ProductSchema2) => {
+    if (user_id === null || cart_id===null ) {
+      addItem({...product},quantity);
+      setCurrentPage('cart');
+      return 
+    }
+    
+    const productSelected = items.find((item) => item.product_id === product.product_id);
+
+
+    const quantitySelected = productSelected ? productSelected.quantity : 0;
+
+    try {
+      if(quantitySelected >= 1 && productSelected){
+        await cartItemService.updateItem(cart_id,productSelected.product_id,{quantity: quantitySelected + quantity})
+        addItem({...product},quantity);
+        setCurrentPage('cart');
+        return
+      } 
+
+      await cartItemService.addItems(cart_id,{quantity: quantitySelected + quantity,product_id: product.product_id,unit_price: product.product_price})
+      addItem({...product},quantity);
+      setCurrentPage('cart');
+      return
+
+    } catch (error) {
+      console.log("InfoPage Error")
+      console.log(error);
+    }
+  }
+
   return (
     !isLoading && product &&<div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -125,7 +169,21 @@ const ProductInfoPage = () => {
               <div className="mb-8">
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
                   <span className="text-sm text-gray-600">Stock Available:</span>
-                  <span className="font-semibold">{product?.product_stock} units</span>
+                  {
+                      product?.productStocks?.[0]?.stock_qty - product?.productStocks?.[0]?.reserved_qty > 0 && (
+                        <span className="font-semibold  text-red-500">
+                           {product?.productStocks?.[0]?.stock_qty - product?.productStocks?.[0]?.reserved_qty } units 
+                        </span>
+                      )
+                  }
+                  {
+                     product?.productStocks?.[0]?.stock_qty - product?.productStocks?.[0]?.reserved_qty <= 0 && (
+                      <span className="font-semibold text-sm text-red-500">
+                        Sold Out
+                      </span>
+                    )
+                  }
+                  {/* <span className="font-semibold">{product?.productStocks?.[0]?.stock_qty - product?.productStocks?.[0]?.reserved_qty } units</span> */}
                 </div>
               </div>
 
@@ -137,14 +195,14 @@ const ProductInfoPage = () => {
                   </div>
                   <div className="flex items-center space-x-4">
                     <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      onClick={handleClickDecreaseQuantity}
                       className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition"
                     >
                       <Minus className="w-5 h-5" />
                     </button>
                     <span className="text-2xl font-semibold w-12 text-center">{quantity}</span>
                     <button
-                      onClick={() => setQuantity(Math.min(product?.product_stock || 0, quantity + 1))}
+                      onClick={handleClickIncreaseQuantity}
                       className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition"
                     >
                       <Plus className="w-5 h-5" />
@@ -154,16 +212,7 @@ const ProductInfoPage = () => {
 
                 <div className="flex space-x-4">
                   <button
-                    // onClick={() => {
-                    //   for (let i = 0; i < quantity; i++) {
-                    //     addToCart(product);
-                    //   }
-                    //   setCurrentPage('cart');
-                    // }}
-                    onClick={() => {
-                      addItem({...product},quantity);
-                      setCurrentPage('cart');
-                    }}
+                    onClick={()=>{handleSubmitProduct(product)}}
                     className="flex-1 py-4 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition font-semibold text-lg"
                   >
                     Add to Cart

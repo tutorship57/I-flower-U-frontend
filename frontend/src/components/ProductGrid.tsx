@@ -7,7 +7,7 @@ import type { ProductSchema2 } from '../types/product';
 //   addItem: (product: ProductSchema, quantity: number) => void;
 // };
 
-const ProductGrid = ({filteredProducts,setSelectedProduct,addItem}: any) => {
+const ProductGrid = ({filteredProducts,setSelectedProduct,handleAddItem}: any) => {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts?.map((product: ProductSchema2) => (
@@ -71,7 +71,7 @@ const ProductGrid = ({filteredProducts,setSelectedProduct,addItem}: any) => {
                     </button>
                     <button
                       // onClick={() => addToCart(product)}
-                      onClick={() => addItem(product,1)}
+                      onClick={() => handleAddItem(product,1)}
                       className="px-4 py-2 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition flex items-center space-x-1"
                     >
                       <Plus className="w-4 h-4" />

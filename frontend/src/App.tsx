@@ -13,6 +13,7 @@ import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/shop-pages/DashboardPage";
 import OrdersPage from "./pages/shop-pages/OrdersPage";
 import ShopSettingsPage from "./pages/shop-pages/ShopSettingsPage";
+import CheckoutSuccess from "./pages/user-pages/CheckoutSuccess";
 
 
 
@@ -33,6 +34,10 @@ const App = () => {
           <Route path="products" element={<UserProductsPage/>}/>
           <Route path="productInfo/:productId" element={<ProductInfoPage />}/>
           <Route path="cart" element={<CartPage/>}/>
+          <Route path="checkout/success" element={<CheckoutSuccess/>}/>
+          {/* <Route path="checkout" element={}/> */}
+          {/* <Route path="checkout/:orderId" element={<CartPage/>}/> */}
+
         </Route>
 
         <Route path="/admin/*" element={<AdminRoute/>}>

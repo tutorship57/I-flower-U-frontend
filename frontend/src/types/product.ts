@@ -30,7 +30,11 @@ export type ProductSchema2 = {
   product_name: string;
   product_description: string;
   product_price: number;
-  product_stock: number;
+  productStocks:{
+    stock_id: string
+    stock_qty: number
+    reserved_qty: number
+  }[]
   category: { category_name: string };
   productImage: { image_url: string }[];
   colors: {

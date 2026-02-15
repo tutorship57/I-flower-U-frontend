@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import AuthForm from "../../components/Auth/AuthForm";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import AuthFooter from"../../components/Auth/AuthFooter";
@@ -6,36 +6,44 @@ import { useNavBarStore } from "../../stores/navbar-store";
 import { authService } from "../../services/auth";
 import { useAuthStore } from "../../stores/auth-store";
 import { useNavigate } from "react-router";
+import { useCartStore } from "../../stores/cart-store";
 
 const LoginPage = () => {
   const {setCurrentPage} = useNavBarStore();
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    name: "",
+    user_email: "",
+    user_password: "",
+    user_name: "",
   });
   const Navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const registerData = {
-        user_email: formData.email,
-        user_password: formData.password,
-        user_username: formData.name,
+        user_email: formData.user_email,
+        user_password: formData.user_password,
+        user_name: formData.user_name,
     }
     const loginData = {
-        user_email: formData.email,
-        user_password: formData.password,
+        user_email: formData.user_email,
+        user_password: formData.user_password,
     }
-    
-    if (isSignUp) {
+    try {
+      if (isSignUp) {
       await authService.register(registerData);
     }else{
      await authService.login(loginData);
-     useAuthStore.getState().fetchCurrentUser();
-     Navigate("/");
+     await Promise.all([
+      useAuthStore.getState().fetchCurrentUser(),
+      useCartStore.getState().setCart_id()
+     ])
      setCurrentPage("home");
+     Navigate("/");
+    }
+    } catch (error) {
+      console.log("Login Error")
+      console.log(error);
     }
     
   };

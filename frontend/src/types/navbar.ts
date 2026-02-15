@@ -1,0 +1,1 @@
+export type Page = "home" | "shop" | "cart" | "profile" | "login" | "register" | "productInfo" | "products" | "history";
