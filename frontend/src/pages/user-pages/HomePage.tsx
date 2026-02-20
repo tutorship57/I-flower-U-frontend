@@ -1,5 +1,8 @@
 import { Clock, Heart, MapPin, Phone } from "lucide-react";
 import { useNavBarStore } from '../../stores/navbar-store';
+//เพิ่ม
+import { Link } from "react-router-dom";
+
 type Product = {
   product_id: string;
   product_name: string;
@@ -145,9 +148,21 @@ const HomePage = () => {
                 >
                   Shop Now
                 </button>
-                <button className="px-8 py-3 bg-white text-rose-500 border-2 border-rose-500 rounded-full hover:bg-rose-50 transition">
+
+                {/* <Link to="/recommend" >
+                  <button className="px-8 py-3 bg-white text-rose-500 border-2 border-rose-500 rounded-full hover:bg-rose-50 transition">
+                    Find flowers for you
+                  </button>
+    
+                </Link> */}
+
+                <Link
+                  to="/recommend"
+                  className="relative z-30 px-8 py-3 bg-white text-rose-500 border-2 border-rose-500 rounded-full hover:bg-rose-50 transition inline-block"
+                >
                   Find flowers for you
-                </button>
+                </Link>
+
               </div>
             </div>
             <div className="relative pt-5 z-30  ">
@@ -274,9 +289,25 @@ const HomePage = () => {
                     <p className="text-center text-gray-600 mb-8 text-sm leading-relaxed">
                         We'll help you find flowers that feel just right.
                     </p>
-                    <button className="w-full py-3 bg-rose-500 text-white rounded-full font-semibold hover:bg-rose-600 transition shadow-md">
+
+                    <Link to="/recommend">
+                      <button className="w-full py-3 bg-rose-500 text-white rounded-full font-semibold hover:bg-rose-600 transition shadow-md">
                         Get Recommendation
-                    </button>
+                      </button>
+                    </Link>
+
+                    {/* <button className="w-full py-3 bg-rose-500 text-white rounded-full font-semibold hover:bg-rose-600 transition shadow-md">
+                        Get Recommendation
+                    </button> */}
+
+
+                    {/* <button
+                        onClick={() => setCurrentPage("/recommend")}
+                        className="w-full py-3 bg-rose-500 text-white rounded-full font-semibold hover:bg-rose-600 transition shadow-md"
+                      >
+                        Get Recommendation
+                    </button> */}
+
                 </div>
             </div>
         </div>
