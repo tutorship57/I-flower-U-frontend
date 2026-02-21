@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { Flower } from "../../types/flower";
 import { FLOWER_DATABASE } from "../../mock/recommendation-mock";
+import { useSearchHistory } from '../../hooks/useSearchHistory';
 
 // ============================================================
 // CONSTANTS
 // ============================================================
-const HISTORY_KEY = 'flowerSearchHistory';
-const MAX_HISTORY_ITEMS = 5;
 
+const MAX_HISTORY_ITEMS = 5;
+const HISTORY_KEY = 'flowerSearchHistory';
 // ============================================================
 // HELPER FUNCTIONS
 // ============================================================
@@ -167,7 +168,7 @@ const GlobalStyles = () => (
 // ============================================================
 export default function FlowerRecommender() {
   const [userInput, setUserInput] = useState('');
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [searchHistory, setSearchHistory] = useSearchHistory(HISTORY_KEY);
   const [showThinking, setShowThinking] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -176,12 +177,17 @@ export default function FlowerRecommender() {
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
   
   const resultsRef = useRef<HTMLDivElement>(null);
-
+  const SUGGESTION_CHIPS = [
+  "Flowers for my girlfriend's birthday",
+  "Flowers to say congratulations",
+  "A romantic bouquet in soft colors",
+  "Something cheerful to brighten someone's day",
+  "Elegant flowers for a special occasion",
+  "I want something warm and comforting"
+];
   // Load search history from localStorage on mount
-  useEffect(() => {
-    const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-    setSearchHistory(history);
-  }, []);
+
+  
 
   // Save search history
   const saveSearchHistory = (searchText: string) => {
