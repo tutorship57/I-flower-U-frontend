@@ -14,6 +14,8 @@ import DashboardPage from "./pages/shop-pages/DashboardPage";
 import OrdersPage from "./pages/shop-pages/OrdersPage";
 import ShopSettingsPage from "./pages/shop-pages/ShopSettingsPage";
 import CheckoutSuccess from "./pages/user-pages/CheckoutSuccess";
+//เพิ่ม
+import Recommend from "./pages/user-pages/Recommend";
 
 
 
@@ -35,6 +37,8 @@ const App = () => {
           <Route path="productInfo/:productId" element={<ProductInfoPage />}/>
           <Route path="cart" element={<CartPage/>}/>
           <Route path="checkout/success" element={<CheckoutSuccess/>}/>
+          {/* เพิ่ม */}
+          <Route path="recommend" element={<Recommend/>} />
           {/* <Route path="checkout" element={}/> */}
           {/* <Route path="checkout/:orderId" element={<CartPage/>}/> */}
 
@@ -50,6 +54,8 @@ const App = () => {
           <Route path="orders" element={<OrdersPage/>} />
           <Route path="settings" element={<ShopSettingsPage/>} />
         </Route>
+
+       
       </Routes>
     </>
   )
