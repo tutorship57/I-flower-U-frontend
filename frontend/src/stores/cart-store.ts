@@ -27,13 +27,10 @@ export const useCartStore = create<CartState>((set, get) => ({
     try {
           const res= await userService.getProfile();
           const data: UserData = res.data;
-          console.log(data);
           set({ cart_id: data.carts[0].cart_id });
           set({ isLoading: false });
-          console.log("Active session found");
         } catch(err) {
           console.log(err)
-          console.log("No active session");
           set({ isLoading: false });
         }
   },

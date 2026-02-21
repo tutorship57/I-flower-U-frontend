@@ -26,7 +26,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       const res= await userService.getProfile();
       const data: UserData = res.data;
-      console.log(data);
       set({
         user: data.user_name,
         user_id: data.user_id,
@@ -34,10 +33,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         loading: false,
         role: data.role.role_name
       });
-      console.log("Active session found");
     } catch(err) {
       console.log(err)
-      console.log("No active session");
       set({ user: null,user_id:null, isLoggedIn: false, loading: false });
     }
   },

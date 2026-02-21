@@ -54,10 +54,7 @@ const ProductsPage = () => {
   const {data: categories, isLoading:isCategoriesLoading,isError:isCategoriesError, error:categoriesError} = useCategories();
   const { data, isLoading, isError, error } = useProducts();
 
-  useEffect(() => {
-    console.log("Products data updated:", data);
-    console.log("Categories data:", categories);
-  }, [data,categories]);
+
 
 
 

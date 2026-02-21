@@ -15,7 +15,6 @@ export const userService = {
     },
     getProfile: async () => {
         const response = await api.get('/user/me');
-        console.log("this is me",response.data);
         return response.data;
     }
 }
