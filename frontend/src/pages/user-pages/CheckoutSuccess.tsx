@@ -1,14 +1,13 @@
-import React, { useEffect ,useState} from 'react'
+import { useEffect ,useState} from 'react'
 import { CircleCheck } from 'lucide-react';
 import { useSearchParams } from 'react-router';
 import { paymentService } from '../../services/payment.service';
-import { useOrderItemsQuery } from '../../queries/order/orderItem.query';
 import { orderItemsService } from '../../services/orderItem.service';
 const CheckoutSuccess = () => {
-    const [searchParams, setSearchParams] = useSearchParams();    
+    const [searchParams,] = useSearchParams();    
     const session_id = searchParams.get('session_id');
-    const [order_id,setOrderId] = useState<string | null>(null);
-    const [orderItems,setOrderItems] = useState([]);
+    const [,setOrderId] = useState<string | null>(null);
+    const [,setOrderItems] = useState([]);
 
     useEffect(()=>{
         const init = async()=>{

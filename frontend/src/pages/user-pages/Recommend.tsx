@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Flower } from "../../types/flower";
 import { FLOWER_DATABASE } from "../../mock/recommendation-mock";
 import { useSearchHistory } from '../../hooks/useSearchHistory';
@@ -49,7 +49,7 @@ const highlightKeywords = (text: string, inputText: string): string => {
     });
   }
   
-  highlightedText = highlightedText.replace(/\{([^}]+)\}/g, (match, keyword) => {
+  highlightedText = highlightedText.replace(/\{([^}]+)\}/g, (_, keyword) => {
     if (wordsToHighlight.includes(keyword)) {
       return `<span class="highlight">${keyword}</span>`;
     }
@@ -408,7 +408,7 @@ export default function FlowerRecommender() {
                       style={{
                         background: '#f8f8f8',
                         border: '1px solid #e8e8e8',
-                        padding: 0,
+                        // padding: 0,
                         height: 40,
                         borderRadius: 20,
                         color: '#666',
@@ -452,7 +452,7 @@ export default function FlowerRecommender() {
                     style={{
                       background: '#ffe8f0',
                       border: '1px solid #ffcfe0',
-                      padding: 0,
+                      // padding: 0,
                       height: 40,
                       borderRadius: 20,
                       color: '#e63956',

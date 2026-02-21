@@ -1,5 +1,3 @@
-import React from 'react'
-
 const StatCard = ({ icon: Icon, label, value, change, color }:any) => (
     <div className="bg-white rounded-lg p-6 shadow-sm">
       <div className="flex items-start justify-between">

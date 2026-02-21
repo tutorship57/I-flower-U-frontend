@@ -1,4 +1,4 @@
-import { Clock, Heart, MapPin, Phone } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useNavBarStore } from '../../stores/navbar-store';
 //เพิ่ม
 import { Link } from "react-router-dom";
@@ -13,13 +13,6 @@ type Product = {
   images: { image_url: string }[];
   colors: string[];
   tags: string[];
-};
-const mockShop = {
-  shop_name: "IflowerU",
-  shop_address: "123 Flower Street, Garden City",
-  shop_phone: "+1 (555) 123-4567",
-  shop_open: 540,
-  shop_close: 1290,
 };
 
 // Mock data based on your schema
@@ -176,13 +169,13 @@ const HomePage = () => {
         </div>
 
         {/* ส่วนโค้ง */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-20">
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0 z-20">
           <svg
             data-name="Layer 1"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 900 120"
             preserveAspectRatio="none"
-            className="relative block w-full h-[350px]"
+            className="relative block w-full h-87.5"
           >
             <path
               d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
@@ -206,7 +199,7 @@ const HomePage = () => {
                 <button
                   key={cat}
                   onClick={() => setCurrentPage("products")}
-                  className="p-6 bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl hover:shadow-lg transition text-center"
+                  className="p-6 bg-linear-to-br from-pink-50 to-rose-50 rounded-2xl hover:shadow-lg transition text-center"
                 >
                   <div className="text-4xl mb-3">🌺</div>
                   <div className="font-semibold text-gray-900">{cat}</div>
@@ -275,16 +268,16 @@ const HomePage = () => {
       {/* Recommend */}
       <div className="py-16 bg-white mb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative h-[535px] group ">
+            <div className="relative h-133.75 group ">
                 {/* Background Image */}
                 <img 
                     src="https://img.pikbest.com/wp/202342/spring-renewal-stunning-tulip-blossoming-on-sun-drenched-background-a-perfect-symbol-of-love-and_9944951.jpg!bw700" 
                     alt="Field of tulips" 
-                    className="absolute top-0 left-0 w-[920px] h-[456px] object-cover shadow-2xl rounded-tr-[5rem] rounded-bl-[5rem] transition-transform duration-700"
+                    className="absolute top-0 left-0 w-230 h-114 object-cover shadow-2xl rounded-tr-[5rem] rounded-bl-[5rem] transition-transform duration-700"
                 />
                 
                 {/* Floating Card Content */}
-                <div className="absolute bottom-0 right-0 md:bottom-8 md:right-8 bg-pink-50 p-8 md:rounded-t-[4rem] rounded-br-[4rem] w-full md:w-[400px] shadow-xl">
+                <div className="absolute bottom-0 right-0 md:bottom-8 md:right-8 bg-pink-50 p-8 md:rounded-t-[4rem] rounded-br-[4rem] w-full md:w-100 shadow-xl">
                     <h3 className="text-center text-2xl font-bold text-gray-900 mb-5">Can't decide yet?</h3>
                     <p className="text-center text-gray-600 mb-8 text-sm leading-relaxed">
                         We'll help you find flowers that feel just right.

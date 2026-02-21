@@ -1,4 +1,4 @@
-import React,{use, useState}from 'react'
+import { useState}from 'react'
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { generateMockData } from '../../mock/shop-mock';
 import ProductModal from '../../components/ProductModal';
@@ -6,13 +6,10 @@ import { useCategories } from '../../queries/category/category.query';
 import { useColors } from '../../queries/color/color.query';
 import { useTagEvents } from '../../queries/tag-event/tag-event.query';
  const ProductsPage = () =>{
-    const [data, setData] = useState(generateMockData());
+    const [data,] = useState(generateMockData());
     const {data:categories,isLoading:isCategoriesLoading} = useCategories();
-    console.log("🚀 ~ ProductsPage ~ categories:", categories)
     const {data: colors,isLoading:isColorsLoading} = useColors();
-    console.log("🚀 ~ ProductsPage ~ colors:", colors)
     const {data: tagEvents,isLoading:isTagEventsLoading} = useTagEvents();
-    console.log("🚀 ~ ProductsPage ~ tagEvents:", tagEvents)
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
     

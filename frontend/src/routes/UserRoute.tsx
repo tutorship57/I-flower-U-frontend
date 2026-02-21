@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import {Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useAuthStore } from "../stores/auth-store";
 // import Footer from "../components/Footer";

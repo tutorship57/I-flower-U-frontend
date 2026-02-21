@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white py-12 mt-16">
@@ -7,7 +5,7 @@ const Footer = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-linear-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-xl">🌸</span>
                 </div>
                 <span className="text-xl font-bold">Blooming Dreams</span>

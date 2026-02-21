@@ -1,8 +1,8 @@
-import React,{useState} from 'react'
+import {useState} from 'react'
 import { Store } from 'lucide-react';
 import { generateMockData } from '../../mock/shop-mock';
 const ShopSettingsPage = () => {
-    const [data, setData] = useState(generateMockData());
+    const [data,] = useState(()=>generateMockData());
     const [shopData, setShopData] = useState(data.shop);
     const minutesToTime = (minutes:any) => {
       const hours = Math.floor(minutes / 60);

@@ -1,14 +1,12 @@
 import React from 'react'
 import { X, Upload } from 'lucide-react';
 import { useState } from 'react';
-import { generateMockData } from '../mock/shop-mock';
+import type { Color } from '../types/color';
 import { productService } from '../services/product-service/product';
 import { productImageService } from '../services/product-service/product-image.service';
 import { productColorService } from '../services/product-service/product-color.service';
 import { productTagsService } from '../services/product-service/product-tag.service';
-import { useCategories } from '../queries/category/category.query';
-import { useColors } from '../queries/color/color.query';
-const ProductModal = ({ product, onClose,categories,colors,tagEvents,isOpen}:any) => {
+const ProductModal = ({ product, onClose,categories,colors,tagEvents}:any) => {
     const [formData, setFormData] = useState<any>(product || {
       product_name: '',
       product_description: '',
@@ -17,13 +15,12 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents,isOpen}:any
       shop_id: 'cmk8c98550000tm8vt92a3d4q',
       category_id: 0,
     });
-    const [selectedColors, setSelectedColors] = useState<{color_id: number}[]>(product ? product.colors : []);
+    const [selectedColors, setSelectedColors] = useState<{color_id: string}[]>(product ? product.colors : []);
     console.log("🚀 ~ ProductModal ~ selectedColors:", selectedColors)
     const [category,setCategory] = useState<string>(product && product.category ? product.category.category_name : ''); 
     const [selectedTags, setSelectedTags] = useState<{tag_id: number}[]>(product ? product.tags : []);
     console.log("🚀 ~ ProductModal ~ selectedTags:", selectedTags)
     const [images, setImages] = useState<File[]>(product ? product.productImage : []);
-    const data = generateMockData();
 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,7 +114,7 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents,isOpen}:any
                 <label className="block text-sm font-medium text-gray-700 mb-1">Colors</label>
                 <div className="flex flex-wrap gap-2">
                   {/* {data.colors.map(color => ( */}
-                    {colors.map(color => (
+                    {colors.map((color: Color) => (
                     <label key={color.color_id} className="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
                       <input
                         type="checkbox"
@@ -125,7 +122,7 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents,isOpen}:any
                         onChange={(e) => {
                           const newColors = e.target.checked
                             ? [...selectedColors, color.color_id]
-                            : selectedColors.filter((id: number) => id !== color.color_id);
+                            : selectedColors.filter((id: string) => id !== color.color_id);
                           setSelectedColors(newColors);
                         }}
                         className="rounded text-pink-600"

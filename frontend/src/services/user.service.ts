@@ -5,7 +5,7 @@ export const userService = {
         const response = await api.get(`/user/${userId}`);
         return response.data;
     },
-    updateUser: async (userId: string, userData: any) => {
+    updateUser: async (userId: string, userData: {user_name:string}) => {
         const response = await api.put(`/user/${userId}`, userData);
         return response.data;
     },

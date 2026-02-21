@@ -6,8 +6,14 @@ import type { ProductSchema2 } from '../types/product';
 //   setSelectedProduct: (product: ProductSchema) => void;
 //   addItem: (product: ProductSchema, quantity: number) => void;
 // };
+interface ProductGridProp {
+  filteredProducts: ProductSchema2[];
+  setSelectedProduct: (product:ProductSchema2)=> void
+  handleAddItem: (product: ProductSchema2, quantity: number) => void;
+  
+}
 
-const ProductGrid = ({filteredProducts,setSelectedProduct,handleAddItem}: any) => {
+const ProductGrid = ({filteredProducts,setSelectedProduct,handleAddItem}: ProductGridProp) => {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts?.map((product: ProductSchema2) => (
@@ -24,9 +30,9 @@ const ProductGrid = ({filteredProducts,setSelectedProduct,handleAddItem}: any) =
                 <button className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md hover:bg-rose-50 transition">
                   <Heart className="w-5 h-5 text-rose-500" />
                 </button>
-                {product.product_stock < 10 && (
+                {product.productStocks[0].stock_qty < 10 && (
                   <div className="absolute top-4 left-4 px-3 py-1 bg-red-500 text-white text-sm rounded-full">
-                    Only {product.product_stock} left
+                    Only {product.productStocks[0].stock_qty} left
                   </div>
                 )}
               </div>

@@ -10,7 +10,7 @@ import { paymentService } from '../../services/payment.service';
 import { checkoutService } from '../../services/checkout.service';
 import { usePaymentRedirect } from '../../hooks/usePaymentRedirect';
 import { cartItemService } from '../../services/cart-item.service';
-import { useState,useEffect } from 'react';
+import { useState,useEffect,useRef } from 'react';
 // Shopping Cart Page
 const CartPage = () => {
   const { items, updateQuantity, removeFromCart } = useCartStore();
@@ -20,10 +20,11 @@ const CartPage = () => {
   const navigate = useNavigate();
   const [order_id, setOrderId] = useState<string | null>(null);
   const subtotal = items.reduce((sum:any, item:any) => sum + item.product_price * item.quantity, 0);
+    const redirectedRef = useRef(false)
   const shipping = 0;
   const total = subtotal + shipping;
   const { setCurrentPage } = useNavBarStore();
-  const { data:productPreview, isLoading, error } = useQuery<[ProductPreview]>({
+  const { data:productPreview} = useQuery<[ProductPreview]>({
     queryKey: ['cart-items-details'],
     queryFn: async () => {
       // Fetch detailed product info for each item in the cart

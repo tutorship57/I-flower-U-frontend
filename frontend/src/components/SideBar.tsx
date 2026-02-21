@@ -1,8 +1,6 @@
-import React from 'react'
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { BarChart3, Package, ShoppingCart, Settings, Store } from 'lucide-react';
 import { useSidebarStore } from '../stores/shop-store';
+import type { Page } from '../types/sidebar';
 const SideBar = () => {
     const menuItems = [
       { id: 'dashboard', icon: BarChart3, label: 'Dashboard' },
@@ -11,10 +9,10 @@ const SideBar = () => {
       { id: 'settings', icon: Settings, label: 'Shop Settings' }
     ];
     const { currentPage, setCurrentPage } = useSidebarStore();
-    const navigate = useNavigate();
-    useEffect(() => {
-        navigate('/'+ 'shop/' + (currentPage === 'home' ? '' : currentPage));
-      },[currentPage])
+    // const navigate = useNavigate();
+    // useEffect(() => {
+    //     navigate('/'+ 'shop/' + (currentPage === 'home' ? '' : currentPage));
+    //   },[currentPage])
     return (
       <div className="w-64 bg-white h-screen border-r border-gray-200 fixed left-0 top-0">
         <div className="p-6 border-b border-gray-200">
@@ -33,7 +31,7 @@ const SideBar = () => {
           {menuItems.map(item => (
             <button
               key={item.id}
-              onClick={() => setCurrentPage(item.id)}
+              onClick={() => setCurrentPage(item.id as Page) }
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                 currentPage === item.id
                   ? 'bg-pink-600 text-white'

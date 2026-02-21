@@ -1,10 +1,8 @@
-import React from 'react'
 import { X } from 'lucide-react';
 import { useState } from 'react';
 import { generateMockData } from '../../mock/shop-mock';
-import { orders } from '../../mock/order-mock';
     const OrdersPage = () =>{ 
-    const [data, setData] = useState(generateMockData());
+    const [data,] = useState(()=>generateMockData());
 
     const [selectedOrder, setSelectedOrder]: any = useState(null);
     const orderStatusColors = {

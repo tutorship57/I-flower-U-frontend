@@ -1,10 +1,9 @@
-import React from 'react'
-import { Plus, DollarSign, ShoppingCart, Package, Users, AlertCircle, X, Upload } from 'lucide-react';
+import { Plus, DollarSign, ShoppingCart, Package, Users, AlertCircle} from 'lucide-react';
 import StatCard from '../../components/StatCard';
 import { useState } from 'react';
 import { generateMockData } from '../../mock/shop-mock';
  const DashboardPage = () => {
-    const [data, setData] = useState(generateMockData());
+    const [data, ] = useState(()=>generateMockData());
   
     const totalRevenue = data.products.reduce((sum, p) => sum + (p.product_price * p.sold), 0);
     const totalOrders = data.orders.length;

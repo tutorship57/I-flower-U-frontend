@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useNavBarStore } from "../../stores/navbar-store";
+import { useState } from "react";
 import FilterElement from "../../components/FilterElement";
 import ProductGrid from "../../components/ProductGrid";
 import { useCartStore } from "../../stores/cart-store";
@@ -13,9 +12,8 @@ const ProductsPage = () => {
   const navigate= useNavigate()
 
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const { setCartItemCount, cartItemCount } = useNavBarStore();
   const { addItem,items } = useCartStore();
-  const { cart_id, setCart_id} = useCartStore();
+  const { cart_id } = useCartStore();
 
   const handleSelectProduct = (product: ProductSchema2) => {
     navigate(`/productInfo/${product.product_id}`);
@@ -51,7 +49,7 @@ const ProductsPage = () => {
   //   "Potted",
   // ];
   // const categories = ["All", "Single", "Set", "Premium", "Mixed", "Potted"];
-  const {data: categories, isLoading:isCategoriesLoading,isError:isCategoriesError, error:categoriesError} = useCategories();
+  const {data: categories, isLoading:isCategoriesLoading} = useCategories();
   const { data, isLoading, isError, error } = useProducts();
 
 
@@ -85,8 +83,6 @@ const ProductsPage = () => {
         {!isLoading && <ProductGrid
           filteredProducts={filteredProducts}
           setSelectedProduct={handleSelectProduct}
-          setCartItemCount={setCartItemCount}
-          cartItemCount={cartItemCount}
           handleAddItem={handleAddItem}
         />} 
       </div>

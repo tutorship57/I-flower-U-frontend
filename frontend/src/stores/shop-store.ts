@@ -1,14 +1,16 @@
 import { create } from "zustand";
-import type { Role } from "../types/role";
-type SideBarState = any;
+import type { Page } from "../types/sidebar";
+type SideBarState = {
+  currentPage: Page;
+  setCurrentPage: (page: Page) => void;
+};
 
-type Page = "Dashboard" | "Products" | "Orders" | "Settings";
-
-
-export const useSidebarStore = create<SideBarState>((set, get) => ({
-  currentPage: localStorage.getItem("shopPage") || "home",
-  setCurrentPage: (page: Page) => {
-    localStorage.setItem("shopPage", page);
+export const useSidebarStore = create<SideBarState>((set) => ({
+  currentPage: "Dashboard",
+  setCurrentPage: (page) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("shopPage", page);
+    }
     set({ currentPage: page });
   },
 }));

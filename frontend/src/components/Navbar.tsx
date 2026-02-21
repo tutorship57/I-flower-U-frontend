@@ -40,10 +40,10 @@ const Navbar = () => {
               onClick={handleClicktoHome}
               className="flex items-center space-x-2"
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-linear-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center">
                 <span className="text-white text-xl">🌸</span>
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-linear-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
                 IFLOWERU
               </span>
             </button>
@@ -180,9 +180,7 @@ const Navbar = () => {
             </button>
             <button
               onClick={() => {
-                isLoggedIn
-                  ? setCurrentPage("profile")
-                  : setCurrentPage("login");
+                setCurrentPage(isLoggedIn ? "profile" : "login");
                 setMobileMenuOpen(false);
               }}
               className="block w-full text-left px-4 py-2 hover:bg-gray-100"
