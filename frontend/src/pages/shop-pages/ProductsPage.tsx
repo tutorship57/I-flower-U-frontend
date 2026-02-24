@@ -5,19 +5,20 @@ import ProductModal from '../../components/ProductModal';
 import { useCategories } from '../../queries/category/category.query';
 import { useColors } from '../../queries/color/color.query';
 import { useTagEvents } from '../../queries/tag-event/tag-event.query';
+import type {ProductSchema2} from '../../types/product';
  const ProductsPage = () =>{
-    const [data,] = useState(generateMockData());
+    const [data,] = useState(()=>generateMockData());
     const {data:categories,isLoading:isCategoriesLoading} = useCategories();
     const {data: colors,isLoading:isColorsLoading} = useColors();
     const {data: tagEvents,isLoading:isTagEventsLoading} = useTagEvents();
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState<any>(null);
+    const [selectedProduct, setSelectedProduct] = useState<ProductSchema2>();
     
     
     return isProductModalOpen && !isColorsLoading && !isCategoriesLoading && !isTagEventsLoading ?
     (
-    <ProductModal
-      isOpen={isProductModalOpen}
+    selectedProduct &&<ProductModal
+      // isOpen={isProductModalOpen}
       onClose={() => setIsProductModalOpen(false)}
       colors={colors} 
       product={selectedProduct}
@@ -33,7 +34,7 @@ import { useTagEvents } from '../../queries/tag-event/tag-event.query';
         </div>
         <button
           onClick={() => {
-            setSelectedProduct(null);
+            setSelectedProduct(undefined);
             setIsProductModalOpen(true);
           }}
           className="bg-pink-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-pink-700"
@@ -60,29 +61,29 @@ import { useTagEvents } from '../../queries/tag-event/tag-event.query';
               <tr key={product.product_id} className="hover:bg-gray-50">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <img src={product.images[0]} alt={product.product_name} className="w-10 h-10 rounded object-cover" />
+                    <img src={product.productImage[0].image_url} alt={product.product_name} className="w-10 h-10 rounded object-cover" />
                     <div>
                       <p className="font-medium text-sm">{product.product_name}</p>
                       <div className="flex gap-1 mt-1">
-                        {product.tags.map(tagId => {
-                          const tag = data.tagEvents.find(t => t.tag_id === tagId);
+                        {product.productTagEvent.map(({TagEvent:{tag_id}}) => {
+                          const tag = data.tagEvents.find(t => t.tag_id === tag_id);
                           return (
-                            <span key={tagId} className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                            <span key={tag_id} className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
                               {tag?.tag_event_name}
                             </span>
-                          );
+                          );  
                         })}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
-                  {data.categories.find(c => c.category_id === product.category_id)?.category_name}
+                  {data.categories.find(c => c.category_id === product.category.category_id)?.category_name}
                 </td>
                 <td className="px-6 py-4 text-sm font-medium">${product.product_price}</td>
                 <td className="px-6 py-4">
-                  <span className={`text-sm ${product.product_stock < 10 ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
-                    {product.product_stock}
+                  <span className={`text-sm ${product.productStocks[0].stock_qty < 10 ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
+                    {product.productStocks[0].stock_qty }
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">{product.sold}</td>

@@ -1,7 +1,9 @@
-import React from 'react'
 
-
-const AuthFooter = ({isSignUp, setIsSignUp}:any) => {
+interface AuthFooterProps {
+  isSignUp: boolean;
+  setIsSignUp: (isSignUp: boolean) => void;
+}
+const AuthFooter = ({isSignUp, setIsSignUp}:AuthFooterProps) => {
   return (
     <>
     <div className="mt-6 text-center">

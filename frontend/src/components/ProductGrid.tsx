@@ -53,12 +53,12 @@ const ProductGrid = ({filteredProducts,setSelectedProduct,handleAddItem}: Produc
                   {product.product_description}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {product.productTagEvent?.TagEvent?.map((tag: { tag_event_name: string }) => (
+                  {product?.productTagEvent?.map(({TagEvent}) => (
                     <span
-                      key={tag.tag_event_name}
+                      key={TagEvent.tag_id}
                       className="px-2 py-1 bg-pink-50 text-pink-600 text-xs rounded-full"
                     >
-                      {tag.tag_event_name}
+                      {TagEvent.tag_event_name}
                     </span>
                   ))}
                 </div>

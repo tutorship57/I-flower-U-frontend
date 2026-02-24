@@ -13,7 +13,7 @@ export const productService = {
         const response = await api.get("/product/");
         return response.data;
     },
-    addProduct: async (product:{product_name: string, product_description: string, product_price: number, product_stock: number}) => {
+    addProduct: async (product:{product_name: string, product_description: string, product_price: number}) => {
         const response = await api.post("/product/", {product});
         return response.data;
     },

@@ -2,11 +2,12 @@ import { create } from "zustand";
 import type  { CartTemp } from "../types/cart";
 import { userService } from "../services/user.service";
 import type { UserData } from "../types/user";
+import type { ProductSchema2 } from "../types/product";
 type CartState = {
   cart_id: string | null;
   items: CartTemp[];
   isLoading: boolean;
-  addItem: (item_id:{product_id: string}, quantity: number) => void;
+  addItem: (item_id:ProductSchema2, quantity: number) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   removeFromCart: (productId: string) => void;
   cartItemCount: number;
@@ -34,7 +35,7 @@ export const useCartStore = create<CartState>((set, get) => ({
           set({ isLoading: false });
         }
   },
-  addItem: (newItem: {product_id: string},quantity: number) => {
+  addItem: (newItem: ProductSchema2,quantity: number) => {
     set((state) =>{
       const existingItemIndex = state.items.findIndex(
         (cartItem) => cartItem.product_id === newItem.product_id

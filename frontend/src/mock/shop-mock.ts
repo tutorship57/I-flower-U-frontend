@@ -1,3 +1,4 @@
+import type {  ProductSchemaShop } from "../types/product";
 export const generateMockData = () => {
   const categories = [
     { category_id: 1, category_name: 'Bouquets' },
@@ -23,17 +24,20 @@ export const generateMockData = () => {
     { tag_id: 5, tag_event_name: 'Sale' }
   ];
 
-  const products = [
+  const products: ProductSchemaShop[] = [
     {
       product_id: '1',
       product_name: 'Rose Bouquet Deluxe',
       product_description: 'Premium red roses arrangement',
       product_price: 89.99,
-      product_stock: 15,
-      category_id: 1,
-      colors: [1, 2],
-      tags: [1, 4],
-      images: ['https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400'],
+      productStocks: [{ stock_id: '1', stock_qty: 25, reserved_qty: 0 }],
+      category: { category_id: 1, category_name: 'Bouquets' },
+      colors: [{
+        color_id:1,
+        color_name: 'Red'
+      }],
+      productTagEvent: [{ TagEvent: { tag_id: 1, tag_event_name: 'Valentine' }}],
+      productImage: [{image_url:'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400'}],
       sold: 245
     },
     {
@@ -41,11 +45,15 @@ export const generateMockData = () => {
       product_name: 'Spring Tulip Set',
       product_description: 'Colorful tulip collection',
       product_price: 65.00,
-      product_stock: 8,
-      category_id: 2,
-      colors: [2, 4],
-      tags: [4],
-      images: ['https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400'],
+      productStocks:[{
+        stock_id: '2',
+        stock_qty: 18,
+        reserved_qty: 0
+      }],
+      category: { category_id: 1, category_name: 'Bouquets' },
+      colors:[{ color_id: 2, color_name: 'Pink' }, { color_id: 3, color_name: 'White' }],
+      productTagEvent: [{ TagEvent: { tag_id: 1, tag_event_name: 'Valentine' }}],
+      productImage: [{image_url:'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400'}],
       sold: 198
     },
     {
@@ -53,11 +61,15 @@ export const generateMockData = () => {
       product_name: 'Carnation Love',
       product_description: 'Sweet carnation bouquet',
       product_price: 45.50,
-      product_stock: 23,
-      category_id: 1,
-      colors: [2, 3],
-      tags: [1],
-      images: ['https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400'],
+      productStocks:[{
+        stock_id: '3',
+        stock_qty: 35,
+        reserved_qty: 0
+      }],
+      category: { category_id: 1, category_name: 'Bouquets' },
+      colors:[{ color_id: 2, color_name: 'Pink' }, { color_id: 3, color_name: 'White' }],
+      productTagEvent: [{ TagEvent: { tag_id: 1, tag_event_name: 'Valentine' }}],
+      productImage: [{image_url:'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400'}],
       sold: 176
     },
     {
@@ -65,11 +77,15 @@ export const generateMockData = () => {
       product_name: 'Ceramic Vase Pink',
       product_description: 'Elegant ceramic vase',
       product_price: 32.00,
-      product_stock: 5,
-      category_id: 4,
-      colors: [2],
-      tags: [],
-      images: ['https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=400'],
+       productStocks:[{
+        stock_id: '4',
+        stock_qty:5,
+        reserved_qty: 0
+      }],
+      category: { category_id: 1, category_name: 'Bouquets' },
+      colors:[{ color_id: 2, color_name: 'Pink' }],
+      productTagEvent: [{ TagEvent: { tag_id: 1, tag_event_name: 'Valentine' }  }],
+      productImage: [{image_url:'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=400'}],
       sold: 142
     },
     {
@@ -77,11 +93,15 @@ export const generateMockData = () => {
       product_name: 'Sunflower Smile',
       product_description: 'Bright sunflower arrangement',
       product_price: 52.00,
-      product_stock: 2,
-      category_id: 1,
-      colors: [4],
-      tags: [4, 5],
-      images: ['https://images.unsplash.com/photo-1597848212624-e530bb09f013?w=400'],
+      productStocks:[{
+        stock_id: '5',
+        stock_qty:5,
+        reserved_qty: 0
+      }],
+      category: { category_id: 1, category_name: 'Bouquets' },
+      colors: [ { color_id: 4, color_name: 'Yellow' },{ color_id: 5, color_name: 'Purple' }],
+      productTagEvent: [{ TagEvent: { tag_id: 1, tag_event_name: 'Valentine' }}],
+      productImage: [{image_url:'https://images.unsplash.com/photo-1597848212624-e530bb09f013?w=400'}],
       sold: 89
     }
   ];

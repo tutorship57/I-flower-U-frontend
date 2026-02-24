@@ -6,22 +6,39 @@ import { productService } from '../services/product-service/product';
 import { productImageService } from '../services/product-service/product-image.service';
 import { productColorService } from '../services/product-service/product-color.service';
 import { productTagsService } from '../services/product-service/product-tag.service';
-const ProductModal = ({ product, onClose,categories,colors,tagEvents}:any) => {
-    const [formData, setFormData] = useState<any>(product || {
+import type { ProductSchema2 } from '../types/product';
+import type { Category } from '../types/category';
+import type { EventTag } from '../types/event-tags'
+type createProduct =  {
+  product_name: string;
+  product_description: string;
+  product_price: number;
+  shop_id: string;
+  category_id: number;
+}
+
+type ProductModalProps = {
+  product: ProductSchema2;
+  onClose: () => void;
+  categories: Category[];
+  colors: Color[];
+  tagEvents: EventTag[];
+}
+const ProductModal = ({ product, onClose,categories,colors,tagEvents}: ProductModalProps) => {
+    const productDestucture = {product_name:product.product_name,product_description:product.product_description,product_price:product.product_price,category_id:product.category.category_id,shop_id:''}
+    const [formData, setFormData] = useState<createProduct>(productDestucture || {
       product_name: '',
       product_description: '',
       product_price: 0,
-      product_stock: 0,
       shop_id: 'cmk8c98550000tm8vt92a3d4q',
       category_id: 0,
     });
-    const [selectedColors, setSelectedColors] = useState<{color_id: string}[]>(product ? product.colors : []);
-    console.log("🚀 ~ ProductModal ~ selectedColors:", selectedColors)
+    const [selectedColors, setSelectedColors] = useState<{color_id: number, color_name: string}[]>(product ? product.colors :[]);
     const [category,setCategory] = useState<string>(product && product.category ? product.category.category_name : ''); 
-    const [selectedTags, setSelectedTags] = useState<{tag_id: number}[]>(product ? product.tags : []);
-    console.log("🚀 ~ ProductModal ~ selectedTags:", selectedTags)
-    const [images, setImages] = useState<File[]>(product ? product.productImage : []);
-
+    const [selectedTags, setSelectedTags] = useState<{tag_id: number}[]>(product ? product.productTagEvent.map((tag: { TagEvent: { tag_id: number } }) => ({tag_id: tag.TagEvent.tag_id})) : []);
+    // const [existingImages, setExistingImages] = useState<string[]>(product ? product.productImage.map((image: { image_url: string }) => image.image_url) : []);
+    // const [deleteImages, setDeleteImages] = useState<string[]>([]);
+    const [images, setImages] = useState<File[]>([]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -32,7 +49,7 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents}:any) => {
       await Promise.all([
         // productCategoryService.addCategory(product_id, String(category)),
         productColorService.addColors(product_id, colors),
-        productTagsService.addProductTags(product_id, tags),
+        productTagsService.addProductTags(product_id, selectedTags),
         productImageService.addImages(product_id, images),
       ]);
       onClose();
@@ -83,16 +100,16 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents}:any) => {
                     required
                   />
                 </div>
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
                   <input
                     type="number"
-                    value={formData.product_stock}
+                    value={formData}
                     onChange={(e) => setFormData({ ...formData, product_stock: parseInt(e.target.value) })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     required
                   />
-                </div>
+                </div> */}
               </div>
 
               <div>
@@ -118,11 +135,11 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents}:any) => {
                     <label key={color.color_id} className="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
                       <input
                         type="checkbox"
-                        checked={selectedColors?.includes(color.color_id)}
+                        checked={selectedColors?.includes(color)}
                         onChange={(e) => {
                           const newColors = e.target.checked
-                            ? [...selectedColors, color.color_id]
-                            : selectedColors.filter((id: string) => id !== color.color_id);
+                            ? [...selectedColors, color]
+                            : selectedColors.filter(({color_id}) =>color_id !== color.color_id);
                           setSelectedColors(newColors);
                         }}
                         className="rounded text-pink-600"
@@ -140,11 +157,11 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents}:any) => {
                     <label key={tag.tag_id} className="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
                       <input
                         type="checkbox"
-                        checked={selectedTags?.includes(tag.tag_id)}
+                        checked={selectedTags?.includes(tag)}
                         onChange={(e) => {
                           const newTags = e.target.checked
-                            ? [...selectedTags, tag.tag_id]
-                            : selectedTags.filter((id: number) => id !== tag.tag_id);
+                            ? [...selectedTags, tag]
+                            : selectedTags.filter(({tag_id}) => tag_id !== tag.tag_id);
                           setSelectedTags(newTags);
                         }}
                         className="rounded text-pink-600"

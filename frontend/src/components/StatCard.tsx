@@ -1,4 +1,13 @@
-const StatCard = ({ icon: Icon, label, value, change, color }:any) => (
+import React from 'react'
+import type { LucideProps } from 'lucide-react'
+interface StatCardProps {
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
+  label: string;
+  value: string;
+  change?: string;
+  color: string;
+}
+const StatCard = ({ icon: Icon, label, value, change, color }:StatCardProps) => (
     <div className="bg-white rounded-lg p-6 shadow-sm">
       <div className="flex items-start justify-between">
         <div>

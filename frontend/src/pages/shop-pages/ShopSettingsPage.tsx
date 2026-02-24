@@ -4,7 +4,7 @@ import { generateMockData } from '../../mock/shop-mock';
 const ShopSettingsPage = () => {
     const [data,] = useState(()=>generateMockData());
     const [shopData, setShopData] = useState(data.shop);
-    const minutesToTime = (minutes:any) => {
+    const minutesToTime = (minutes:number) => {
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
       return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;

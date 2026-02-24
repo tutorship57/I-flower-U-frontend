@@ -1,10 +1,10 @@
 import React from "react";
 
 import { Heart } from "lucide-react";
-import type { Product } from "../types/product";
+import type { ProductSchema2 } from "../types/product";
 interface Props {
-  product: Product;
-  setSelectedProduct: React.Dispatch<React.SetStateAction<Product>>;
+  product: ProductSchema2;
+  setSelectedProduct: React.Dispatch<React.SetStateAction<ProductSchema2>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -16,7 +16,7 @@ const ProductCard = ({ product, setSelectedProduct, setCurrentPage }: Props) => 
     >
       <div className="relative">
         <img
-          src={product.images[0].image_url}
+          src={product.productImage[0].image_url}
           alt={product.product_name}
           className="w-full h-64 object-cover"
         />

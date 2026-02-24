@@ -1,6 +1,12 @@
-import React from 'react'
-
-const InputField = ({ label, type, value, onChange, placeholder, required }: any) => (
+interface InputFieldProps {
+  label: string;
+  type: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  required: boolean;
+}
+const InputField = ({ label, type, value, onChange, placeholder, required }: InputFieldProps) => (
   <div>
     <label className="block text-sm font-semibold text-gray-700 mb-2">{label}</label>
     <input

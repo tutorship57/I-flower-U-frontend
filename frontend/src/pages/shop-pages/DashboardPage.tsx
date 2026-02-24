@@ -9,7 +9,7 @@ import { generateMockData } from '../../mock/shop-mock';
     const totalOrders = data.orders.length;
     const totalProducts = data.products.length;
     const newCustomers = 342;
-    const lowStockProducts = data.products.filter(p => p.product_stock < 10);
+    const lowStockProducts = data.products.filter(p => p.productStocks[0].stock_qty < 10);
     
     return(
     <div className="space-y-6">
@@ -42,14 +42,14 @@ import { generateMockData } from '../../mock/shop-mock';
         <StatCard
           icon={Package}
           label="Products Listed"
-          value={totalProducts}
+          value={totalProducts+""}
           change="-2.4%"
           color="bg-orange-600"
         />
         <StatCard
           icon={Users}
           label="New Customers"
-          value={newCustomers}
+          value={newCustomers+""}
           change="+15.3%"
           color="bg-green-600"
         />
@@ -140,10 +140,10 @@ import { generateMockData } from '../../mock/shop-mock';
           <div className="space-y-4">
             {data.products.slice(0, 4).map(product => (
               <div key={product.product_id} className="flex items-center gap-4">
-                <img src={product.images[0]} alt={product.product_name} className="w-12 h-12 rounded object-cover" />
+                <img src={product.productImage[0].image_url} alt={product.product_name} className="w-12 h-12 rounded object-cover" />
                 <div className="flex-1">
                   <p className="font-medium text-sm">{product.product_name}</p>
-                  <p className="text-xs text-gray-600">Category: {data.categories.find(c => c.category_id === product.category_id)?.category_name}</p>
+                  <p className="text-xs text-gray-600">Category: {data.categories.find(c => c.category_id === product.category.category_id)?.category_name}</p>
                 </div>
                 <div className="text-right">
                   <p className="font-semibold">${product.product_price}</p>

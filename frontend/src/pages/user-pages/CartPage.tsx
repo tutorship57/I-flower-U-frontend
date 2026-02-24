@@ -11,7 +11,9 @@ import { checkoutService } from '../../services/checkout.service';
 import { usePaymentRedirect } from '../../hooks/usePaymentRedirect';
 import { cartItemService } from '../../services/cart-item.service';
 import { useState,useEffect,useRef } from 'react';
+import type { CartTemp } from '../../types/cart';
 // Shopping Cart Page
+
 const CartPage = () => {
   const { items, updateQuantity, removeFromCart } = useCartStore();
 
@@ -19,7 +21,7 @@ const CartPage = () => {
   const {cart_id} = useCartStore()
   const navigate = useNavigate();
   const [order_id, setOrderId] = useState<string | null>(null);
-  const subtotal = items.reduce((sum:any, item:any) => sum + item.product_price * item.quantity, 0);
+  const subtotal = items.reduce((sum:number, item:CartTemp) => sum + item.product_price * item.quantity, 0);
     const redirectedRef = useRef(false)
   const shipping = 0;
   const total = subtotal + shipping;
@@ -43,8 +45,6 @@ const CartPage = () => {
       navigate('/login')
       return
     }
-    console.log("this is user_id",user_id)
-    console.log('Checkout clicked');
     try {
       const checkoutPayload = {
       cart_id,

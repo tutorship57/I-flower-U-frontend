@@ -136,7 +136,7 @@ const ProductInfoPage = () => {
               <div className="mb-6">
                 <h3 className="font-semibold mb-2">Available Colors:</h3>
                 <div className="flex space-x-3">
-                  {product?.colors?.length >0 ? product?.colors?.map(({color_id,color_name}: {color_id: string; color_name: string}) => (
+                  {product?.colors?.length >0 ? product?.colors?.map(({color_id,color_name}) => (
                     <button
                       key={color_id}
                       className="px-4 py-2 border-2 border-gray-200 rounded-full hover:border-rose-500 transition"
@@ -154,7 +154,7 @@ const ProductInfoPage = () => {
               <div className="mb-6">
                 <h3 className="font-semibold mb-2">Perfect for:</h3>
                 <div className="flex flex-wrap gap-2">
-                  {product?.productTagEvent?.TagEvent?.length >0 ? product?.productTagEvent?.TagEvent.map(({tag_id,tag_event_name}: {tag_id: string; tag_event_name: string}) => (
+                  {product?.productTagEvent.length >0 ? product?.productTagEvent.map(({TagEvent:{tag_id,tag_event_name}}) => (
                     <span key={tag_id} className="px-4 py-2 bg-rose-50 text-rose-600 rounded-full">
                       {tag_event_name}
                     </span>
