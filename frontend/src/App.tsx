@@ -16,6 +16,8 @@ import ShopSettingsPage from "./pages/shop-pages/ShopSettingsPage";
 import CheckoutSuccess from "./pages/user-pages/CheckoutSuccess";
 //เพิ่ม
 import Recommend from "./pages/user-pages/Recommend";
+import ShopRedirectRoute from "./routes/ShopRedirectRoute";
+import NotfoundPage from "./pages/NotfoundPage";
 
 
 
@@ -30,6 +32,7 @@ const App = () => {
     <>
       <ToastContainer />
       <Routes>
+        <Route path="*" element={<NotfoundPage/>}/>
         <Route path="/" element={<UserRoute/>}>
           <Route path="" element={<HomePage/>} />
           <Route path="login" element={<LoginPage/>}/>
@@ -48,11 +51,16 @@ const App = () => {
 
         </Route>
 
-        <Route path="/shop" element={<ShopRoute/>}>
-          <Route path="dashboard" element={<DashboardPage/>} />
-          <Route path="products" element={<ShopProductsPage/>} />
-          <Route path="orders" element={<OrdersPage/>} />
-          <Route path="settings" element={<ShopSettingsPage/>} />
+        <Route path="/shop" element={<ShopRedirectRoute/>}>
+
+          <Route path=":shopId" element={<ShopRoute/>}>
+            <Route index element={<DashboardPage/>} />
+            <Route path="dashboard" element={<DashboardPage/>} />
+            <Route path="products" element={<ShopProductsPage/>} />
+            <Route path="orders" element={<OrdersPage/>} />
+            <Route path="settings" element={<ShopSettingsPage/>} />
+          </Route>
+
         </Route>
 
        
