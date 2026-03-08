@@ -1,1 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 @import "tailwindcss";
+
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1.2deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(1.2deg);
+  }
+}
+
+@keyframes blobPulse {
+
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.07);
+  }
+}
+
+@keyframes drift {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-22px) rotate(16deg);
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nf-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.nf-blob {
+  animation: blobPulse 5s ease-in-out infinite;
+}
+
+.nf-drift {
+  animation: drift 8s ease-in-out infinite;
+}
+
+.nf-fade-1 {
+  animation: fadeUp .6s ease .10s both;
+}
+
+.nf-fade-2 {
+  animation: fadeUp .6s ease .22s both;
+}
+
+.nf-fade-3 {
+  animation: fadeUp .6s ease .36s both;
+}
+
+.nf-fade-4 {
+  animation: fadeUp .6s ease .50s both;
+}
+
+.nf-404 {
+  font-size: clamp(7rem, 22vw, 17rem);
+  font-weight: 900;
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(140deg, #F72585 0%, #FF6EB4 50%, #FFB3D1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -6px;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 12px 32px rgba(247, 37, 133, .30));
+}
+
+.nf-404-outline {
+  position: absolute;
+  inset: 0;
+  font-size: clamp(7rem, 22vw, 17rem);
+  font-weight: 900;
+  font-family: 'Nunito', sans-serif;
+  -webkit-text-stroke: 3px #FFD6E7;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -6px;
+  line-height: 1;
+  z-index: 0;
+  transform: translate(5px, 8px);
+}
+
+.nf-btn-lift {
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.nf-btn-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Animation Definition */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+    /* Adjust this for more/less movement */
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
