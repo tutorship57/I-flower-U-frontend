@@ -9,6 +9,8 @@ type AuthState = {
     user_id: string | null;
     user: string | null;  // หรืออาจจะเป็น object ที่เก็บข้อมูลผู้ใช้เพิ่มเติม
     role: Role;
+    shop_id: string | null,
+    shop_name: string | null,
     isLoggedIn: boolean;
     fetchCurrentUser: () => Promise<void>;
     logout: () => Promise<void>;
@@ -19,7 +21,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   loading: true,
   user_id: null,
   user: null,          // { id, role } หรือ null
-  role: "guest" as Role,
+  shop_id: null,
+  shop_name: null,
+  role: "USER" as Role,
   isLoggedIn: false,
   fetchCurrentUser: async () => {
     set({ loading: true });
@@ -31,8 +35,11 @@ export const useAuthStore = create<AuthState>((set) => ({
         user_id: data.user_id,
         isLoggedIn: true,
         loading: false,
+        shop_id: data.shops[0]?.shop_id,
+        shop_name: data.shops[0]?.shop_name,
         role: data.role.role_name
       });
+      set({ loading: false})
     } catch(err) {
       console.log(err)
       set({ user: null,user_id:null, isLoggedIn: false, loading: false });

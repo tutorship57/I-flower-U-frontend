@@ -6,7 +6,13 @@ export type UserData = {
     role:{
         role_id: string;
         role_name: Role;
-    }
+    },
+    shops:[
+        {
+            shop_id: string;
+            shop_name: string;
+        }
+    ]
     carts:[
         {
             cart_id: string;
