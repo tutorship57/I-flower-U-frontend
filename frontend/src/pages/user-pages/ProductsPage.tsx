@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useProducts } from "../../queries/product/product.query";
 import { useCategories } from "../../queries/category/category.query";
 import { cartItemService } from "../../services/cart-item.service";
+import ProductGridSkeleton from "../../components/ProductGridSkeleton";
 
 const ProductsPage = () => {
   const navigate= useNavigate()
@@ -40,15 +41,7 @@ const ProductsPage = () => {
       console.log(error)
     }
   }
-  // const categories = [
-  //   "All",
-  //   "Bouquets",
-  //   "Arrangements",
-  //   "Premium",
-  //   "Mixed",
-  //   "Potted",
-  // ];
-  // const categories = ["All", "Single", "Set", "Premium", "Mixed", "Potted"];
+  
   const {data: categories, isLoading:isCategoriesLoading} = useCategories();
   const { data, isLoading, isError, error } = useProducts();
 
@@ -68,7 +61,7 @@ const ProductsPage = () => {
         );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen nf-fade-3 bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold mb-8">Our Collection</h1>
 
@@ -80,11 +73,11 @@ const ProductsPage = () => {
         />}
 
         {/* Products Grid */}
-        {!isLoading && <ProductGrid
+        {!isLoading ? <ProductGrid
           filteredProducts={filteredProducts}
           setSelectedProduct={handleSelectProduct}
           handleAddItem={handleAddItem}
-        />} 
+        /> : <ProductGridSkeleton/>} 
       </div>
     </div>
   );

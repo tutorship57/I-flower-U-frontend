@@ -17,7 +17,7 @@ import type {ProductSchema2} from '../../types/product';
     
     return isProductModalOpen && !isColorsLoading && !isCategoriesLoading && !isTagEventsLoading ?
     (
-    selectedProduct &&<ProductModal
+     <ProductModal
       // isOpen={isProductModalOpen}
       onClose={() => setIsProductModalOpen(false)}
       colors={colors} 
@@ -36,6 +36,7 @@ import type {ProductSchema2} from '../../types/product';
           onClick={() => {
             setSelectedProduct(undefined);
             setIsProductModalOpen(true);
+            console.log("open add new Product")
           }}
           className="bg-pink-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-pink-700"
         >

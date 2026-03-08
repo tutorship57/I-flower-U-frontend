@@ -7,6 +7,7 @@ import { authService } from "../../services/auth";
 import { useAuthStore } from "../../stores/auth-store";
 import { useNavigate } from "react-router";
 import { useCartStore } from "../../stores/cart-store";
+import toastifyService from "../../shared/toastify";
 
 const LoginPage = () => {
   const {setCurrentPage} = useNavBarStore();
@@ -31,9 +32,21 @@ const LoginPage = () => {
     }
     try {
       if (isSignUp) {
-      await authService.register(registerData);
+      await toastifyService.promise( authService.register(registerData),
+      {
+        pending: 'Creating your account...',
+        success: 'Account Create Successfully !',
+        error: 'Account Creation Failed Please Try Again',
+      })
+      setIsSignUp(false)
     }else{
-     await authService.login(loginData);
+     await toastifyService.promise( authService.login(loginData),
+    {
+        pending: 'Login to account ....',
+        success: 'Welcome back !',
+        error: 'Login Failed Please Try Again',
+    }
+    )
      await Promise.all([
       useAuthStore.getState().fetchCurrentUser(),
       useCartStore.getState().setCart_id()
@@ -45,12 +58,11 @@ const LoginPage = () => {
       console.log("Login Error")
       console.log(error);
     }
-    
   };
 
   return (
-    <div className="min-h-screen  bg-gradient-to-br from-pink-50 to-rose-50 py-12 px-4">
-          <div className="max-w-md mx-auto ">
+    <div className=" min-h-screen  bg-linear-to-br from-pink-50 to-rose-50 py-12 px-4">
+          <div className="max-w-md mx-auto nf-fade-1">
             <AuthHeader isSignUp={isSignUp} />
             <div className="bg-white rounded-3xl shadow-xl p-8">
               <AuthForm

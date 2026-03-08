@@ -18,14 +18,14 @@ type createProduct =  {
 }
 
 type ProductModalProps = {
-  product: ProductSchema2;
+  product: ProductSchema2 | undefined;
   onClose: () => void;
   categories: Category[];
   colors: Color[];
   tagEvents: EventTag[];
 }
 const ProductModal = ({ product, onClose,categories,colors,tagEvents}: ProductModalProps) => {
-    const productDestucture = {product_name:product.product_name,product_description:product.product_description,product_price:product.product_price,category_id:product.category.category_id,shop_id:''}
+    const productDestucture = product?{product_name:product.product_name,product_description:product.product_description,product_price:product.product_price,category_id:product.category.category_id,shop_id:''}:undefined 
     const [formData, setFormData] = useState<createProduct>(productDestucture || {
       product_name: '',
       product_description: '',
@@ -36,22 +36,31 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents}: ProductMo
     const [selectedColors, setSelectedColors] = useState<{color_id: number, color_name: string}[]>(product ? product.colors :[]);
     const [category,setCategory] = useState<string>(product && product.category ? product.category.category_name : ''); 
     const [selectedTags, setSelectedTags] = useState<{tag_id: number}[]>(product ? product.productTagEvent.map((tag: { TagEvent: { tag_id: number } }) => ({tag_id: tag.TagEvent.tag_id})) : []);
+    const [productStock,setProductStock] = useState<number>(product?product.productStocks[0].stock_qty:0)
     // const [existingImages, setExistingImages] = useState<string[]>(product ? product.productImage.map((image: { image_url: string }) => image.image_url) : []);
     // const [deleteImages, setDeleteImages] = useState<string[]>([]);
     const [images, setImages] = useState<File[]>([]);
-
+    
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const productResponse = await productService.addProduct(formData);
-      const data = productResponse.data;
-      const {product_id} = data;
-      console.log("this is product id",product_id);
-      await Promise.all([
-        // productCategoryService.addCategory(product_id, String(category)),
-        productColorService.addColors(product_id, colors),
-        productTagsService.addProductTags(product_id, selectedTags),
-        productImageService.addImages(product_id, images),
-      ]);
+      console.log("🚀 ~ ProductModal ~ formData:", formData)
+      console.log("🚀 ~ ProductModal ~ selectedTags:", selectedTags)
+      console.log("🚀 ~ ProductModal ~ category:", category) 
+      console.log("🚀 ~ ProductModal ~ selectedColors:", selectedColors)
+      console.log("🚀 ~ ProductModal ~ productStock:", productStock)
+      console.log("🚀 ~ ProductModal ~ images:", images)
+      
+      // const productResponse = await productService.addProduct(formData);
+      // console.log("🚀 ~ handleSubmit ~ formData:", formData)
+      // const data = productResponse.data;
+      // const {product_id} = data;
+      // console.log("this is product id",product_id);
+      // await Promise.all([
+      //   productCategoryService.addCategory(product_id, String(category)),
+      //   productColorService.addColors(product_id, colors),
+      //   productTagsService.addProductTags(product_id, selectedTags),
+      //   productImageService.addImages(product_id, images),
+      // ]);
       onClose();
     };
 
@@ -72,7 +81,10 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents}: ProductMo
                 <input
                   type="text"
                   value={formData.product_name}
-                  onChange={(e) => setFormData({ ...formData, product_name: e.target.value })}
+                  onChange={(e) => {
+                    console.log("🚀 ~ ProductModal ~ formData:", formData)
+                    return setFormData({ ...formData, product_name: e.target.value });
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   required
                 />
@@ -82,7 +94,10 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents}: ProductMo
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea
                   value={formData.product_description}
-                  onChange={(e) => setFormData({ ...formData, product_description: e.target.value })}
+                  onChange={(e) => {
+                    console.log("🚀 ~ ProductModal ~ formData:", formData)
+                    return setFormData({ ...formData, product_description: e.target.value });
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   rows={3}
                 />
@@ -95,28 +110,34 @@ const ProductModal = ({ product, onClose,categories,colors,tagEvents}: ProductMo
                     type="number"
                     step="0.01"
                     value={formData.product_price}
-                    onChange={(e) => setFormData({ ...formData, product_price: parseFloat(e.target.value) })}
+                    onChange={(e) => {
+                      console.log("🚀 ~ ProductModal ~ formData:", formData)
+                      return setFormData({ ...formData, product_price: parseFloat(e.target.value) });
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     required
                   />
                 </div>
-                {/* <div>
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
                   <input
                     type="number"
-                    value={formData}
-                    onChange={(e) => setFormData({ ...formData, product_stock: parseInt(e.target.value) })}
+                    value={productStock}
+                    onChange={(e) => setProductStock(parseInt(e.target.value))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     required
                   />
-                </div> */}
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                 <select
                   value={category ? category : ''}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => {
+                    setCategory(e.target.value)
+                    setFormData({...formData,category_id:parseInt(e.target.value)})
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   required
                 >
