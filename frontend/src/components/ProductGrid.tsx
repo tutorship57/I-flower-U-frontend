@@ -15,7 +15,7 @@ interface ProductGridProp {
 
 const ProductGrid = ({filteredProducts,setSelectedProduct,handleAddItem}: ProductGridProp) => {
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="nf-fade-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts?.map((product: ProductSchema2) => (
             <div
               key={product.product_id}
