@@ -6,10 +6,10 @@ type SideBarState = {
 };
 
 export const useSidebarStore = create<SideBarState>((set) => ({
-  currentPage: "Dashboard",
+  currentPage: sessionStorage.getItem("shopPage") as Page | "Dashboard",
   setCurrentPage: (page) => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("shopPage", page);
+      sessionStorage.setItem("shopPage", page);
     }
     set({ currentPage: page });
   },

@@ -1,6 +1,8 @@
 import { BarChart3, Package, ShoppingCart, Settings, Store } from 'lucide-react';
 import { useSidebarStore } from '../stores/shop-store';
 import type { Page } from '../types/sidebar';
+import { useAuthStore } from '../stores/auth-store';
+import { useNavigate, useParams } from 'react-router';
 const SideBar = () => {
     const menuItems = [
       { id: 'dashboard', icon: BarChart3, label: 'Dashboard' },
@@ -9,10 +11,10 @@ const SideBar = () => {
       { id: 'settings', icon: Settings, label: 'Shop Settings' }
     ];
     const { currentPage, setCurrentPage } = useSidebarStore();
-    // const navigate = useNavigate();
-    // useEffect(() => {
-    //     navigate('/'+ 'shop/' + (currentPage === 'home' ? '' : currentPage));
-    //   },[currentPage])
+    const { shop_name } = useAuthStore()
+    const navigate = useNavigate();
+    const {shopId} = useParams()
+
     return (
       <div className="w-64 bg-white h-screen border-r border-gray-200 fixed left-0 top-0">
         <div className="p-6 border-b border-gray-200">
@@ -21,8 +23,8 @@ const SideBar = () => {
               <Store className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-lg text-gray-900">Bloom Market</h1>
-              <p className="text-xs text-gray-600">Seller Dashboard</p>
+              <h1 className="font-bold text-lg text-gray-900">{shop_name === null  ? 'Bloom Market' :`${shop_name} `}</h1>
+              <p className="text-xs text-gray-600">Seller Management</p>
             </div>
           </div>
         </div>
@@ -31,7 +33,11 @@ const SideBar = () => {
           {menuItems.map(item => (
             <button
               key={item.id}
-              onClick={() => setCurrentPage(item.id as Page) }
+              onClick={() => {
+                const nextPage = item.id 
+                setCurrentPage(item.id as Page)
+                navigate(`/shop/${shopId}/${nextPage}`);
+              }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                 currentPage === item.id
                   ? 'bg-pink-600 text-white'
