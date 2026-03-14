@@ -16,7 +16,8 @@ import ShopSettingsPage from "./pages/shop-pages/ShopSettingsPage";
 import CheckoutSuccess from "./pages/user-pages/CheckoutSuccess";
 //เพิ่ม
 import Recommend from "./pages/user-pages/Recommend";
-
+//ทดสอบ
+import Recommend_Test from "./pages/user-pages/Recommend_Test";
 
 
 
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="checkout/success" element={<CheckoutSuccess/>}/>
           {/* เพิ่ม */}
           <Route path="recommend" element={<Recommend/>} />
+          <Route path="recommend-test" element={<Recommend_Test/>} />
           {/* <Route path="checkout" element={}/> */}
           {/* <Route path="checkout/:orderId" element={<CartPage/>}/> */}
 

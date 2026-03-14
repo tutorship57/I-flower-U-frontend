@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { Flower } from "../../types/flower";
 import { FLOWER_DATABASE } from "../../mock/recommendation-mock";
+import { SUGGESTION_CHIPS } from "../../mock/recommendation-mock";
 
-// ============================================================
 // CONSTANTS
-// ============================================================
 const HISTORY_KEY = 'flowerSearchHistory';
 const MAX_HISTORY_ITEMS = 5;
 
-// ============================================================
 // HELPER FUNCTIONS
-// ============================================================
 const findBestMatch = (inputText: string): Flower => {
   const lowerInput = inputText.toLowerCase();
   let bestMatch = FLOWER_DATABASE[0];
@@ -58,9 +55,7 @@ const highlightKeywords = (text: string, inputText: string): string => {
   return highlightedText;
 }
 
-// ============================================================
 // STYLES COMPONENT
-// ============================================================
 const GlobalStyles = () => (
   <style>{`
 
@@ -174,6 +169,7 @@ export default function FlowerRecommender() {
   const [featuredFlower, setFeaturedFlower] = useState<Flower | null>(null);
   const [currentInput, setCurrentInput] = useState('');
   const [wishlist, setWishlist] = useState<Set<number>>(new Set());
+  const [personality, setPersonality] = useState("");
   
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -201,17 +197,84 @@ export default function FlowerRecommender() {
   };
 
   const handleRecommend = () => {
+    
     const inputText = userInput.trim();
     
     if (!inputText) {
-      alert("Please tell us what you're looking for! ✨");
+      alert("Please tell us what you're looking for!");
       return;
     }
 
     saveSearchHistory(inputText);
     setCurrentInput(inputText);
-    const match = findBestMatch(inputText);
-    setFeaturedFlower(match);
+
+
+    //เชื่อมAPI -------------------------------------------------------
+    fetch("http://localhost:3000/api/recommendation/flower", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: currentInput
+      })
+    })
+    .then(res => res.json())
+
+    .then(data => {
+
+      console.log("API RESULT:", data);
+
+      setPersonality(data.data.user_personality);
+      // setPersonality(data?.data?.user_personality || "");
+
+      
+      // เพิ่ม
+      if (!data.data || !data.data.suitable_flowers) {
+        console.log("No flower returned from API");
+        return;
+      }
+
+      // ดึงดอกไม้ตัวแรกจาก API
+      // const flowerName = data.data.suitable_flowers[0].toLowerCase().trim();
+      const aiFlowers = data.data.suitable_flowers.map(
+        f =>
+          f.toLowerCase().trim()
+      );
+
+      // เลือกดอกที่ตรงกับ input มากสุด
+      const flowerName =
+        aiFlowers.find(f => currentInput.toLowerCase().includes(f)) ||
+        aiFlowers.find(f => f.includes(currentInput.toLowerCase())) ||
+        aiFlowers[0];
+
+      let match = FLOWER_DATABASE.find(f => 
+        currentInput.toLowerCase().includes(f.name.toLowerCase().split(' ')[0]) || // เช่น "tulip" ใน "tulips"
+        f.keywords.some(k => currentInput.toLowerCase().includes(k.toLowerCase()))
+      );
+      //ถ้าหาจาก Input ไม่เจอ ค่อยเอาคำแนะนำจาก AI มาหา
+      if (!match) {
+        const flowerNameFromAI = aiFlowers[0]; // ดึงตัวแรกที่ AI แนะนำ
+        match = FLOWER_DATABASE.find(f =>
+          f.name.toLowerCase().includes(flowerNameFromAI) ||
+          flowerNameFromAI.includes(f.name.toLowerCase()) ||
+          f.keywords.some(k => flowerNameFromAI.includes(k.toLowerCase()))
+        );
+      }
+
+      console.log("match:", match);
+      console.log("User input:", currentInput);
+      console.log("AI flowers:", data.data.suitable_flowers);
+
+      if (match) {
+        setFeaturedFlower(match);
+      } else {
+        //แนะนำดอกไม้ที่ไม่มีใน shop
+        setFeaturedFlower(FLOWER_DATABASE[0]);
+      };
+    })
+
+    //--------------------------------------------------------------------
 
     // Show thinking animation
     setShowThinking(true);
@@ -222,7 +285,7 @@ export default function FlowerRecommender() {
       setShowThinking(false);
       setShowModal(true);
     }, 2000);
-  };
+    };
 
   const closeModal = () => {
     setShowModal(false);
@@ -579,6 +642,24 @@ export default function FlowerRecommender() {
                   fontSize: '1.8rem',
                   marginBottom: '0.5rem'
                 }}>The flower that feels just right for you</h2>
+
+                {personality && (
+                  <div
+                    style={{
+                      background: '#fdf3f6',
+                      padding: '1rem',
+                      borderRadius: 12,
+                      marginTop: '1rem',
+                      color: '#555',
+                      fontSize: '0.95rem',
+                      lineHeight: 1.6
+                    }}
+                  >
+                    <strong style={{ color: '#e63956' }}>Your personality:</strong>
+                    <p style={{ marginTop: '0.3rem' }}>{personality}</p>
+                  </div>
+                )}
+
                 <button
                   onClick={closeModal}
                   style={{
@@ -727,7 +808,7 @@ export default function FlowerRecommender() {
                         borderRadius: '0 25px 25px 0',
                         boxShadow: '0 4px 15px rgba(230, 57, 86, 0.4)',
                         animation: 'ribbonSlide 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards'
-                      }}>⭐ Our Top Recommendation</div>
+                      }}>Recommended for You</div>
                     )}
                     
                     <div style={{
