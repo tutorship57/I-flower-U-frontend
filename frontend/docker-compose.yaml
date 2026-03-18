@@ -1,0 +1,9 @@
+services:
+  frontend-ifloweru:
+    image: anuw4tthannop/i-floweru-frontend
+    container_name: ifloweru
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+    ports:  
+      - "5173:4173"
+    command: ["npm", "run", "preview"]
