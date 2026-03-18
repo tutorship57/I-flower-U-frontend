@@ -2,10 +2,10 @@ import React from 'react'
 import { X, Upload } from 'lucide-react';
 import { useState } from 'react';
 import type { Color } from '../types/color';
-import { productService } from '../services/product-service/product';
-import { productImageService } from '../services/product-service/product-image.service';
-import { productColorService } from '../services/product-service/product-color.service';
-import { productTagsService } from '../services/product-service/product-tag.service';
+// import { productService } from '../services/product-service/product';
+// import { productImageService } from '../services/product-service/product-image.service';
+// import { productColorService } from '../services/product-service/product-color.service';
+// import { productTagsService } from '../services/product-service/product-tag.service';
 import type { ProductSchema2 } from '../types/product';
 import type { Category } from '../types/category';
 import type { EventTag } from '../types/event-tags'

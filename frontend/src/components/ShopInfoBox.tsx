@@ -1,4 +1,3 @@
-import React from "react";
 import type { ShopInfo } from "../types/shop";
 import { minutesToTime } from "../utils/calculateTime.util";
 import { useState } from "react";
