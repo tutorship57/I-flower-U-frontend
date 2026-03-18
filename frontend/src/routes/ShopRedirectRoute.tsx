@@ -7,8 +7,15 @@ const ShopRedirectRoute = () => {
   const { user, role, shop_id, loading, fetchCurrentUser } = useAuthStore(); 
 
   useEffect(() => {
-    fetchCurrentUser();
-  }, [fetchCurrentUser]);
+    const init = async ()=>{
+      await fetchCurrentUser()
+    }
+    init()
+  }, []);
+
+  useEffect(() => {
+  console.log('this is user', user, role, shop_id)
+}, [user, role, shop_id])
 
   if (loading) return <div>Loading...</div>;
 
