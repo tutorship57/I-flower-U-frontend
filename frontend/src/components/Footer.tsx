@@ -5,10 +5,14 @@ const Footer = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-10 h-10 bg-linear-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xl">🌸</span>
+               <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <img
+                    src="/logo_ifloweru.png"
+                    alt="logo"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <span className="text-xl font-bold">Blooming Dreams</span>
+                <span className="text-xl font-bold">IflowerU</span>
               </div>
               <p className="text-gray-400">
                 Fresh flowers delivered with love for every occasion.
@@ -24,19 +28,15 @@ const Footer = () => {
                 </li>
                 <li>
                   <button className="hover:text-white transition">
-                    Bouquets
+                    Single
                   </button>
                 </li>
                 <li>
                   <button className="hover:text-white transition">
-                    Arrangements
+                    Set
                   </button>
                 </li>
-                <li>
-                  <button className="hover:text-white transition">
-                    Wedding
-                  </button>
-                </li>
+                
               </ul>
             </div>
             <div>
@@ -78,7 +78,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Blooming Dreams. All rights reserved.</p>
+            <p>&copy; 2025 IflowerU. Bringing beauty to every moment.</p>
           </div>
         </div>
       </footer>

@@ -28,7 +28,8 @@ export const useCartStore = create<CartState>((set, get) => ({
     try {
           const res= await userService.getProfile();
           const data: UserData = res.data;
-          set({ cart_id: data.carts[0].cart_id });
+          // set({ cart_id: data.carts[0].cart_id });
+          set({ cart_id: data.carts?.[0]?.cart_id || null }); //แทนอันบน
           set({ isLoading: false });
         } catch(err) {
           console.log(err)

@@ -8,7 +8,7 @@ import { productService } from '../../services/product-service/product';
 import type { ProductSchema2 } from '../../types/product';
 import { useAuthStore } from '../../stores/auth-store';
 import { cartItemService } from '../../services/cart-item.service';
-
+import { useWishlistStore } from '../../stores/wishlist-store';
 
 // Product Info Page
 // const ProductInfoPage = ({ product }: Props) => {
@@ -36,6 +36,8 @@ const ProductInfoPage = () => {
   const navigate = useNavigate()
   const { user_id } = useAuthStore()
   const { cart_id } = useCartStore()
+  const { toggleItem, isWishlisted } = useWishlistStore();
+  const wishlisted = product ? isWishlisted(product.product_id) : false;
   const handleNavigateBacktoProducts = () => {
     navigate('/products')
   }
@@ -217,8 +219,23 @@ const ProductInfoPage = () => {
                   >
                     Add to Cart
                   </button>
-                  <button className="p-4 border-2 border-rose-500 text-rose-500 rounded-full hover:bg-rose-50 transition">
+                  {/* <button className="p-4 border-2 border-rose-500 text-rose-500 rounded-full hover:bg-rose-50 transition">
                     <Heart className="w-6 h-6" />
+                  </button> */}
+                  
+                  <button
+                    onClick={() => toggleItem(product)}
+                    className={`p-4 border-2 rounded-full transition ${
+                      wishlisted
+                        ? "border-rose-500 bg-rose-500 text-white"
+                        : "border-rose-500 text-rose-500 hover:bg-rose-50"
+                    }`}
+                    title={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                  >
+                    <Heart
+                      className="w-6 h-6"
+                      fill={wishlisted ? "currentColor" : "none"}
+                    />
                   </button>
                 </div>
               </div>

@@ -21,7 +21,7 @@ const UserRoute = () => {
   return isUserLoading || isCartLoading ? null : (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-        <Outlet />
+      <Outlet />
       <Footer />
     </div>
   );

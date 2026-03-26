@@ -32,12 +32,30 @@ export const useNavBarDesktop = (setCurrentPage: (page: Page) => void,navigate: 
     navigate('/');
   }
 
+  const handleClickToCategory = ()=>{
+    setCurrentPage('categories');
+    navigate('/categories');
+  }
+
+  const handleClickToAbout = ()=>{
+    setCurrentPage('about');
+    navigate('/about');
+  }
+
+   const handleClickToHistory = ()=>{
+    setCurrentPage('history');
+    navigate('/history');
+  }
+
   return {
     handleClickToLogin,
     handleClicktoHome,
     handleClickToProfile,
     handleClickToProducts,
     handleClickToCart,
-    handleClickToLogout
+    handleClickToLogout,
+    handleClickToCategory,
+    handleClickToAbout,
+    handleClickToHistory
   }
 }

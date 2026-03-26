@@ -1,5 +1,6 @@
 import { Heart, Star, Plus } from 'lucide-react';
 import type { ProductSchema2 } from '../types/product';
+import { useWishlistStore } from '../stores/wishlist-store';
 // type Props = {
 //   filteredProducts: ProductSchema2[];
 //   setCurrentPage: (page: string) => void;
@@ -14,6 +15,7 @@ interface ProductGridProp {
 }
 
 const ProductGrid = ({filteredProducts,setSelectedProduct,handleAddItem}: ProductGridProp) => {
+  const { toggleItem, isWishlisted } = useWishlistStore()
   return (
     <div className="nf-fade-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts?.map((product: ProductSchema2) => (
@@ -27,9 +29,20 @@ const ProductGrid = ({filteredProducts,setSelectedProduct,handleAddItem}: Produc
                   alt={product.product_name}
                   className="w-full h-72 object-cover"
                 />
-                <button className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md hover:bg-rose-50 transition">
-                  <Heart className="w-5 h-5 text-rose-500" />
-                </button>
+                 <button
+              onClick={(e) => {
+                e.stopPropagation(); 
+                toggleItem(product);
+              }}
+              className={`absolute top-4 right-4 p-2 bg-white rounded-full shadow-md transition ${
+                isWishlisted(product.product_id) ? "bg-rose-50" : "hover:bg-rose-50"
+              }`}
+            >
+              <Heart
+                className="w-5 h-5 text-rose-500"
+                fill={isWishlisted(product.product_id) ? "currentColor" : "none"}
+              />
+            </button>
                 {product.productStocks[0].stock_qty < 10 && (
                   <div className="absolute top-4 left-4 px-3 py-1 bg-red-500 text-white text-sm rounded-full">
                     Only {product.productStocks[0].stock_qty} left

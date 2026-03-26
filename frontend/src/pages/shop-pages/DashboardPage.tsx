@@ -1,172 +1,181 @@
-import { Plus, DollarSign, ShoppingCart, Package, Users, AlertCircle} from 'lucide-react';
-import StatCard from '../../components/StatCard';
+import { Plus, DollarSign, ShoppingCart, Package, Users, AlertCircle, ArrowUpRight } from 'lucide-react';
 import { useState } from 'react';
 import { generateMockData } from '../../mock/shop-mock';
- const DashboardPage = () => {
-    const [data, ] = useState(()=>generateMockData());
-  
-    const totalRevenue = data.products.reduce((sum, p) => sum + (p.product_price * p.sold), 0);
-    const totalOrders = data.orders.length;
-    const totalProducts = data.products.length;
-    const newCustomers = 342;
-    const lowStockProducts = data.products.filter(p => p.productStocks[0].stock_qty < 10);
-    
-    return(
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+import StatCard from '../../components/StatCard';
+
+
+// ─── Main Component ───────────────────────────────────────────────────────────
+
+const DashboardPage = () => {
+  const [data] = useState(() => generateMockData());
+
+  const totalRevenue = data.products.reduce((sum, p) => sum + (p.product_price * p.sold), 0);
+  const totalOrders = data.orders.length;
+  const totalProducts = data.products.length;
+  const newCustomers = 342;
+  const lowStockProducts = data.products.filter(p => p.productStocks[0].stock_qty < 10);
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-          <p className="text-gray-600 mt-1">Welcome back! Here's what's happening with your shop today.</p>
+          <h1 className="text-3xl font-black text-gray-800">Shop Overview</h1>
+          <p className="text-gray-400 text-sm mt-1">Welcome back! Monitoring your store performance.</p>
         </div>
-        <button className="bg-pink-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-pink-700">
-          <Plus className="w-4 h-4" />
+        {/* <button className="bg-rose-500 text-white px-5 py-2.5 rounded-xl flex items-center justify-center gap-2 font-bold shadow-sm hover:bg-rose-600 transition-all active:scale-95">
+          <Plus className="w-5 h-5" />
           Add Product
-        </button>
+        </button> */}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stat Cards Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
           icon={DollarSign}
           label="Total Revenue"
           value={`$${totalRevenue.toLocaleString()}`}
-          change="+12.5%"
-          color="bg-pink-600"
+          sub="Monthly earnings"
+          color="bg-rose-500"
         />
         <StatCard
           icon={ShoppingCart}
           label="Total Orders"
           value={totalOrders.toLocaleString()}
-          change="+8.2%"
-          color="bg-purple-600"
+          sub="+8.2% from last week"
+          color="bg-blue-500"
         />
         <StatCard
           icon={Package}
-          label="Products Listed"
-          value={totalProducts+""}
-          change="-2.4%"
-          color="bg-orange-600"
+          label="Products"
+          value={totalProducts}
+          sub="Items in inventory"
+          color="bg-emerald-500"
         />
         <StatCard
           icon={Users}
           label="New Customers"
-          value={newCustomers+""}
-          change="+15.3%"
-          color="bg-green-600"
+          value={newCustomers}
+          sub="Total reached"
+          color="bg-purple-500"
         />
       </div>
 
+      {/* Low Stock Alert */}
       {lowStockProducts.length > 0 && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
-            <div>
-              <h3 className="font-semibold text-yellow-900">Low Stock Alert</h3>
-              <p className="text-sm text-yellow-800 mt-1">
-                {lowStockProducts.length} product{lowStockProducts.length > 1 ? 's' : ''} running low on stock:
-                {' '}{lowStockProducts.map(p => p.product_name).join(', ')}
-              </p>
-            </div>
+        <div className="mb-8 bg-amber-50 border border-amber-100 rounded-2xl p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5" />
+          <div className="min-w-0">
+            <h3 className="font-bold text-amber-800">Low Stock Alert</h3>
+            <p className="text-sm text-amber-700 mt-0.5 truncate">
+              {lowStockProducts.length} items need attention: 
+              <span className="font-semibold ml-1">
+                {lowStockProducts.slice(0, 2).map(p => p.product_name).join(', ')}
+                {lowStockProducts.length > 2 ? '...' : ''}
+              </span>
+            </p>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-lg p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Revenue Trends</h2>
-            <div className="flex gap-2">
-              <button className="px-3 py-1 text-sm bg-pink-100 text-pink-600 rounded">Daily</button>
-              <button className="px-3 py-1 text-sm text-gray-600 rounded hover:bg-gray-100">Weekly</button>
-              <button className="px-3 py-1 text-sm text-gray-600 rounded hover:bg-gray-100">Monthly</button>
+      {/* Charts & Status Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Revenue Trends Chart */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-base font-bold text-gray-800">Revenue Trends</h2>
+            <div className="flex bg-gray-100 p-1 rounded-xl">
+              <button className="px-3 py-1 text-xs font-bold bg-white text-rose-500 rounded-lg shadow-sm">Daily</button>
+              <button className="px-3 py-1 text-xs font-bold text-gray-400 hover:text-gray-600 transition px-3">Weekly</button>
             </div>
           </div>
-          <div className="h-64 flex items-end gap-2">
+          <div className="h-64 flex items-end gap-3 px-2">
             {[3000, 3500, 2800, 4200, 4500, 5000, 4800].map((val, idx) => (
-              <div key={idx} className="flex-1 bg-pink-200 rounded-t" style={{ height: `${(val / 5000) * 100}%` }} />
+              <div 
+                key={idx} 
+                className="flex-1 bg-rose-100 hover:bg-rose-500 transition-all duration-300 rounded-t-lg relative group" 
+                style={{ height: `${(val / 5000) * 100}%` }}
+              >
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition shadow-xl z-10 font-bold">
+                  ${val.toLocaleString()}
+                </div>
+              </div>
             ))}
           </div>
-          <div className="flex justify-between mt-2 text-xs text-gray-600">
-            <span>Mon</span>
-            <span>Tue</span>
-            <span>Wed</span>
-            <span>Thu</span>
-            <span>Fri</span>
-            <span>Sat</span>
-            <span>Sun</span>
+          <div className="flex justify-between mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">Order Status</h2>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Shipped</span>
-              <span className="text-sm font-semibold">22.5%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div className="bg-green-500 h-2 rounded-full" style={{ width: '22.5%' }} />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Processing</span>
-              <span className="text-sm font-semibold">39.1%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div className="bg-blue-500 h-2 rounded-full" style={{ width: '39.1%' }} />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Pending</span>
-              <span className="text-sm font-semibold">16.1%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div className="bg-purple-500 h-2 rounded-full" style={{ width: '16.1%' }} />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Delivered</span>
-              <span className="text-sm font-semibold">22.3%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div className="bg-teal-500 h-2 rounded-full" style={{ width: '22.3%' }} />
-            </div>
+        {/* Order Status Progress */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <h2 className="text-base font-bold text-gray-800 mb-6">Order Status</h2>
+          <div className="space-y-6">
+            {[
+              { label: 'Shipped', color: 'bg-emerald-500', val: '22.5%' },
+              { label: 'Processing', color: 'bg-blue-500', val: '39.1%' },
+              { label: 'Pending', color: 'bg-amber-500', val: '16.1%' },
+              { label: 'Delivered', color: 'bg-rose-500', val: '22.3%' },
+            ].map((item) => (
+              <div key={item.label}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-gray-500">{item.label}</span>
+                  <span className="text-sm font-black text-gray-800">{item.val}</span>
+                </div>
+                <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div className={`${item.color} h-2 rounded-full shadow-sm`} style={{ width: item.val }} />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
+      {/* Bottom Lists Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Top Selling Products</h2>
-            <button className="text-pink-600 text-sm hover:underline">View All</button>
+        {/* Top Selling Products */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-base font-bold text-gray-800">Top Selling Products</h2>
+            <button className="text-xs font-bold text-rose-500 flex items-center gap-1 hover:underline">
+              View All <ArrowUpRight className="w-3 h-3" />
+            </button>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-5">
             {data.products.slice(0, 4).map(product => (
-              <div key={product.product_id} className="flex items-center gap-4">
-                <img src={product.productImage[0].image_url} alt={product.product_name} className="w-12 h-12 rounded object-cover" />
-                <div className="flex-1">
-                  <p className="font-medium text-sm">{product.product_name}</p>
-                  <p className="text-xs text-gray-600">Category: {data.categories.find(c => c.category_id === product.category.category_id)?.category_name}</p>
+              <div key={product.product_id} className="flex items-center gap-4 group cursor-pointer">
+                <img 
+                  src={product.productImage[0].image_url} 
+                  alt={product.product_name} 
+                  className="w-12 h-12 rounded-xl object-cover shadow-sm group-hover:ring-2 group-ring-rose-100 transition-all" 
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-sm text-gray-800 truncate group-hover:text-rose-500 transition-colors">{product.product_name}</p>
+                  <p className="text-xs text-gray-400">Sold {product.sold} units</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold">${product.product_price}</p>
-                  <p className="text-xs text-gray-600">{product.sold} sold</p>
+                  <p className="font-black text-sm text-gray-800">${product.product_price.toLocaleString()}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">Category Performance</h2>
-          <div className="space-y-3">
-            {data.categories.map((category, idx) => {
+        {/* Category Performance */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <h2 className="text-base font-bold text-gray-800 mb-6">Category Performance</h2>
+          <div className="space-y-5">
+            {data.categories.slice(0, 5).map((category, idx) => {
               const values = [8000, 6000, 4500, 3200, 2000];
+              const percent = (values[idx] / 8000) * 100;
               return (
                 <div key={category.category_id}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm">{category.category_name}</span>
-                    <span className="text-sm font-semibold">${values[idx]}</span>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-500">{category.category_name}</span>
+                    <span className="text-sm font-black text-gray-800">${values[idx].toLocaleString()}</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-pink-500 h-2 rounded-full" style={{ width: `${(values[idx] / 8000) * 100}%` }} />
+                  <div className="w-full bg-gray-100 rounded-full h-2">
+                    <div className="bg-rose-400 h-2 rounded-full" style={{ width: `${percent}%` }} />
                   </div>
                 </div>
               );
@@ -175,7 +184,7 @@ import { generateMockData } from '../../mock/shop-mock';
         </div>
       </div>
     </div>
-  )};
+  );
+};
 
-
-export default DashboardPage
+export default DashboardPage;

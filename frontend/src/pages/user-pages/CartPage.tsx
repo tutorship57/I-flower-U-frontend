@@ -12,7 +12,7 @@ import { usePaymentRedirect } from '../../hooks/usePaymentRedirect';
 import { cartItemService } from '../../services/cart-item.service';
 import { useState,useEffect,useRef } from 'react';
 import type { CartTemp } from '../../types/cart';
-// Shopping Cart Page
+
 
 const CartPage = () => {
   const { items, updateQuantity, removeFromCart } = useCartStore();
@@ -29,7 +29,7 @@ const CartPage = () => {
   const { data:productPreview} = useQuery<[ProductPreview]>({
     queryKey: ['cart-items-details'],
     queryFn: async () => {
-      // Fetch detailed product info for each item in the cart
+      
       const productDetails =await productService.getProductByIds(
         items.map(item => item.product_id)
       );
@@ -40,7 +40,7 @@ const CartPage = () => {
   usePaymentRedirect(order_id, user_id)
 
   const handleCheckout = async () => {
-    // Handle checkout logic here
+    
     if(user_id === null || cart_id === null){
       navigate('/login')
       return
@@ -132,7 +132,7 @@ const CartPage = () => {
             <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
             <p className="text-gray-600 mb-8">Add some beautiful flowers to get started!</p>
             <button
-              onClick={() => setCurrentPage('products')}
+              onClick={() =>  navigate('/products')}
               className="px-8 py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition"
             >
               Browse Products
@@ -215,7 +215,7 @@ const CartPage = () => {
                   Proceed to Checkout
                 </button>
                 <button
-                  onClick={() => setCurrentPage('products')}
+                  onClick={() =>  navigate('/products')}
                   className="w-full py-3 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition"
                 >
                   Continue Shopping
