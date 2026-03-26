@@ -2,13 +2,16 @@ import React from 'react'
 
 
 interface CategoriesProps {
-  categories: string[];
+  categories: {
+    category_name:string,
+    category_id:string
+  }[];
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 const FilterElement = ({ categories, selectedCategory, setSelectedCategory }: CategoriesProps) => {
   return (
-     <div className="mb-8 flex flex-wrap gap-3">
+     <div className="nf-fade-3 mb-8 flex flex-wrap gap-3">
            <button
               key={0}
               onClick={() => setSelectedCategory('All')}
@@ -20,7 +23,7 @@ const FilterElement = ({ categories, selectedCategory, setSelectedCategory }: Ca
               >
               {'All'}
             </button>
-          {categories.map((cat: any) => (
+          {categories.map((cat:{category_id:string,category_name:string}) => (
 
             <button
               key={cat.category_id}
