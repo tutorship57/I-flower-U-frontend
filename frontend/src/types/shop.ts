@@ -10,4 +10,9 @@ export type ShopInfo = {
     user_name: string;
     user_email: string;
   };
+
+  //เพิ่ม
+  product_count?: number;
+  order_count?: number;
+  total_revenue?: number;
 };

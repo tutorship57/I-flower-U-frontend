@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"; // หรือ library ที่คุณใช้
+import { useQuery } from "@tanstack/react-query"; 
 import { shopService } from "../../services/shop.service";
 
 export const useShopInfo = (shopId: string) => {

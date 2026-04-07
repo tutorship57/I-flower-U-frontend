@@ -10,11 +10,15 @@ const UserRoute = () => {
   const {fetchCurrentUser,loading : isUserLoading} = useAuthStore();
   const {setCart_id,isLoading : isCartLoading} = useCartStore();
   useEffect(() => {
+    // const init = async()=>{
+    //   await Promise.all([
+    //     fetchCurrentUser(),
+    //     setCart_id()
+    //   ]);
+    // }
     const init = async()=>{
-      await Promise.all([
-        fetchCurrentUser(),
-        setCart_id()
-      ]);
+      await fetchCurrentUser()  // โหลด user ก่อน
+      await setCart_id()        // แล้วค่อยโหลด cart
     }
     init();
   }, []);

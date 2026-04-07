@@ -40,6 +40,8 @@ const CartPage = () => {
   usePaymentRedirect(order_id, user_id)
 
   const handleCheckout = async () => {
+    console.log("user_id:", user_id)
+    console.log("cart_id:", cart_id)
     
     if(user_id === null || cart_id === null){
       navigate('/login')
@@ -50,8 +52,9 @@ const CartPage = () => {
       cart_id,
       user_id
     }
+    console.log("📦 checkout payload:", checkoutPayload)
     const checkoutResponse = await checkoutService.getCheckout(checkoutPayload)
-    console.log(checkoutResponse)
+    console.log("📦 checkout response:", JSON.stringify(checkoutResponse))
     setOrderId(checkoutResponse.data.order_id)
     } catch (error) {
       console.log("CartPage Error Checkout")
