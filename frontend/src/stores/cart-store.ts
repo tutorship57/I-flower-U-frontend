@@ -3,7 +3,6 @@ import type  { CartTemp } from "../types/cart";
 import { userService } from "../services/user.service";
 import type { UserData } from "../types/user";
 import type { ProductSchema2 } from "../types/product";
-import { cartService } from "../services/cart.service";
 import { cartItemService } from "../services/cart-item.service"
 
 type CartState = {
@@ -47,21 +46,23 @@ export const useCartStore = create<CartState>((set, get) => ({
       const res = await userService.getProfile();
       const data: UserData = res.data;
       
-      let cartId = data.carts?.[0]?.cart_id || null;
+      const cartId = data.carts?.[0]?.cart_id || null;
 
       // ถ้าไม่มี cart ให้สร้างใหม่เลย
-      if (!cartId) {
-        console.log("🛒 ไม่มี cart สร้างใหม่...")
-        const newCart = await cartService.addItem({user_id: data.user_id}) // สร้าง cart ใหม่
-        console.log("🛒 full response:", JSON.stringify(newCart))
-        cartId = newCart.data?.cart_id || null
-        console.log("🛒 cart ใหม่:", cartId)
-      }
+      
       // เพิ่ม sync items จาก localStorage ขึ้น database
       if (cartId) {
         const currentItems = get().items
         for (const item of currentItems) {
           try {
+            
+            const itemExistResponse = await cartItemService.getItemByProductId(cartId,item.product_id)
+            const itemExist = itemExistResponse.data
+            console.log(itemExist)
+            if(itemExist){
+              await cartItemService.updateItem(cartId,itemExist.product_id,{quantity:item.quantity})
+              return
+            }
             await cartItemService.addItems(cartId, {
               product_id: item.product_id,
               quantity: item.quantity,
@@ -71,7 +72,15 @@ export const useCartStore = create<CartState>((set, get) => ({
             console.log("sync item error:", err)
           }
         }
+        get().clear()
+        const getItemResponse = await cartItemService.getItem(cartId)
+        const getItem = getItemResponse.data
+        set({ cart_id: cartId, isLoading: false, items:getItem });
+        return
       }
+      
+
+      
 
       set({ cart_id: cartId, isLoading: false });
     } catch(err) {

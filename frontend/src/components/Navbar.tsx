@@ -19,6 +19,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { currentPage, setCurrentPage } = useNavBarStore();
+  const {clear} = useCartStore()
   const { isLoggedIn, user, logout, shop_id, role,fetchCurrentUser } = useAuthStore();
   const { items } = useCartStore();
   const navigate = useNavigate();
@@ -35,7 +36,10 @@ const Navbar = () => {
     handleClickToCategory,
     handleClickToAbout,
     handleClickToHistory,
-  } = useNavBarDesktop(setCurrentPage, navigate, logout);
+  } = useNavBarDesktop(setCurrentPage, navigate, ()=>{
+    logout()
+    clear()
+  });
 
   // ────────────────────────────────────────────
 

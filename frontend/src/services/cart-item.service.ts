@@ -3,7 +3,11 @@ import type { CreateCartItemData,UpdateCartItemData } from "../types/cart-items"
 
 export const cartItemService = {
   getItem: async (cart_id: string) => {
-    const res = await api.get(`/cart/${cart_id}/`);
+    const res = await api.get(`/cart/${cart_id}/cart-item/`);
+    return res.data;
+  },
+  getItemByProductId:async (cart_id:string,product_id:string)=>{
+    const res = await api.get(`/cart/${cart_id}/cart-item/${product_id}`);
     return res.data;
   },
   addItems: async (cart_id: string, data:CreateCartItemData) => {

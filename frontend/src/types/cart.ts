@@ -15,5 +15,6 @@ export type CartItem = {
 };
 
 export interface CartTemp  extends ProductSchema2{
+  unit_price?: number ;
   quantity: number;
 }

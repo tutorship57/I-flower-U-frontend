@@ -1,6 +1,5 @@
 import { ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 import { useCartStore } from '../../stores/cart-store';
-import { useNavBarStore } from '../../stores/navbar-store';
 import { useQuery } from '@tanstack/react-query';
 import { productService } from '../../services/product-service/product';
 import type { ProductPreview } from '../../types/product';
@@ -16,28 +15,27 @@ import type { CartTemp } from '../../types/cart';
 
 const CartPage = () => {
   const { items, updateQuantity, removeFromCart,clear } = useCartStore();
+  const redirectedRef = useRef(false)
 
   const {user_id} = useAuthStore()
   const {cart_id} = useCartStore()
   const navigate = useNavigate();
   const [order_id, setOrderId] = useState<string | null>(null);
-  const subtotal = items.reduce((sum:number, item:CartTemp) => sum + item.product_price * item.quantity, 0);
-    const redirectedRef = useRef(false)
-  const shipping = 0;
-  const total = subtotal + shipping;
-  const { setCurrentPage } = useNavBarStore();
-  const { data:productPreview} = useQuery<[ProductPreview]>({
+  console.log(items)
+ 
+  
+  const { data:productPreview,isLoading} = useQuery<[ProductPreview]>({
     queryKey: ['cart-items-details'],
     queryFn: async () => {
-      
       const productDetails =await productService.getProductByIds(
         items.map(item => item.product_id)
       );
       return productDetails.data;
     }
   })
-
   usePaymentRedirect(order_id, user_id)
+
+
 
   const handleCheckout = async () => {
     console.log("user_id:", user_id)
@@ -125,6 +123,14 @@ const CartPage = () => {
   
       return () => clearInterval(interval)
     }, [order_id, user_id])
+
+  if(isLoading){
+    return null
+  }
+
+   const subtotal = items.reduce((sum:number, item:CartTemp) => sum + (item.product_price??item.unit_price) * item.quantity, 0);
+  const shipping = 0;
+  const total = subtotal + shipping;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">

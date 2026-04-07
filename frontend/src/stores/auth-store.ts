@@ -58,10 +58,8 @@
 
 import { create } from "zustand";
 import type { Role } from "../types/role";
-import type { UserData } from "../types/user";
 import { userService } from "../services/user.service";
 import { authService } from "../services/auth";
-
 type AuthState = {
     loading: boolean;
     user_id: string | null;
@@ -74,6 +72,7 @@ type AuthState = {
     logout: () => Promise<void>;
     setShop: (shop_id: string, shop_name?: string) => void; //เพิ่ม
 }
+
 
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -206,6 +205,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         isLoggedIn: false,
         role: "USER" 
       });
+
     } catch (error) {
       console.log(error)
     }
