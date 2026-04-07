@@ -3,6 +3,9 @@ import type  { CartTemp } from "../types/cart";
 import { userService } from "../services/user.service";
 import type { UserData } from "../types/user";
 import type { ProductSchema2 } from "../types/product";
+import { cartService } from "../services/cart.service";
+import { cartItemService } from "../services/cart-item.service"
+
 type CartState = {
   cart_id: string | null;
   items: CartTemp[];
@@ -24,18 +27,58 @@ export const useCartStore = create<CartState>((set, get) => ({
     const { items } = get();
     localStorage.setItem("cartItems", JSON.stringify(items));
   },  
+  // setCart_id: async () : Promise<void> => {
+  //   try {
+  //         const res= await userService.getProfile();
+  //         const data: UserData = res.data;
+  //         console.log("🛒 carts from profile:", data.carts)
+  //         console.log("🛒 cart_id:", data.carts?.[0]?.cart_id)
+  //         // set({ cart_id: data.carts[0].cart_id });
+  //         set({ cart_id: data.carts?.[0]?.cart_id || null }); //แทนอันบน
+  //         set({ isLoading: false });
+  //       } catch(err) {
+  //         console.log(err)
+  //         set({ isLoading: false });
+  //       }
+  // },
   setCart_id: async () : Promise<void> => {
     try {
-          const res= await userService.getProfile();
-          const data: UserData = res.data;
-          // set({ cart_id: data.carts[0].cart_id });
-          set({ cart_id: data.carts?.[0]?.cart_id || null }); //แทนอันบน
-          set({ isLoading: false });
-        } catch(err) {
-          console.log(err)
-          set({ isLoading: false });
+      const res = await userService.getProfile();
+      const data: UserData = res.data;
+      
+      let cartId = data.carts?.[0]?.cart_id || null;
+
+      // ถ้าไม่มี cart ให้สร้างใหม่เลย
+      if (!cartId) {
+        console.log("🛒 ไม่มี cart สร้างใหม่...")
+        const newCart = await cartService.addItem({user_id: data.user_id}) // สร้าง cart ใหม่
+        console.log("🛒 full response:", JSON.stringify(newCart))
+        cartId = newCart.data?.cart_id || null
+        console.log("🛒 cart ใหม่:", cartId)
+      }
+      // เพิ่ม sync items จาก localStorage ขึ้น database
+      if (cartId) {
+        const currentItems = get().items
+        for (const item of currentItems) {
+          try {
+            await cartItemService.addItems(cartId, {
+              product_id: item.product_id,
+              quantity: item.quantity,
+              unit_price: item.product_price
+            })
+          } catch (err) {
+            console.log("sync item error:", err)
+          }
         }
+      }
+
+      set({ cart_id: cartId, isLoading: false });
+    } catch(err) {
+      console.log(err)
+      set({ isLoading: false });
+    }
   },
+
   addItem: (newItem: ProductSchema2,quantity: number) => {
     set((state) =>{
       const existingItemIndex = state.items.findIndex(

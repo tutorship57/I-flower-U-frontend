@@ -12,6 +12,10 @@ export const shopService = {
    
   },
   createShop: async () => {},
-  updateShop: async () => {},
+  // updateShop: async () => {},
+  updateShop: async (shopId: string, data: any) => {
+    const response = await api.put(`/shop/${shopId}`, data);
+    return response.data;
+  },
   deleteShop: async () => {},
 };

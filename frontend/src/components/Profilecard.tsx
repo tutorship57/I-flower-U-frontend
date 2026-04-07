@@ -81,7 +81,6 @@ export const OrdersActivityCard = ({
         label="My Orders"
         sub="Track and manage your orders"
         onClick={() => navigate("/history")}
-        badge="3"
       />
       <ActionButton
         icon={<Heart className="w-4 h-4" />}
