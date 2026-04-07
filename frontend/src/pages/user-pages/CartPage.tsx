@@ -15,7 +15,7 @@ import type { CartTemp } from '../../types/cart';
 
 
 const CartPage = () => {
-  const { items, updateQuantity, removeFromCart } = useCartStore();
+  const { items, updateQuantity, removeFromCart,clear } = useCartStore();
 
   const {user_id} = useAuthStore()
   const {cart_id} = useCartStore()
@@ -54,7 +54,7 @@ const CartPage = () => {
     }
     console.log("📦 checkout payload:", checkoutPayload)
     const checkoutResponse = await checkoutService.getCheckout(checkoutPayload)
-    console.log("📦 checkout response:", JSON.stringify(checkoutResponse))
+    console.log(checkoutResponse)
     setOrderId(checkoutResponse.data.order_id)
     } catch (error) {
       console.log("CartPage Error Checkout")
@@ -115,9 +115,10 @@ const CartPage = () => {
   
         const res = await paymentService.getPaymentByOrderId(order_id)
         if (!res.data || redirectedRef.current) return
-  
+        
         redirectedRef.current = true
         clearInterval(interval)
+        clear()
         window.location.href = res.data.payment_url
       }, 2000)
       console.log("this is order id",order_id)

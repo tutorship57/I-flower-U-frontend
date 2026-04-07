@@ -16,6 +16,7 @@ type CartState = {
   cartItemCount: number;
   setLocalStorage: () => void;
   setCart_id: () =>  Promise<void> ;
+  clear:()=>void
 };
 
 export const useCartStore = create<CartState>((set, get) => ({
